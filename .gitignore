@@ -1,0 +1,9 @@
+# Common to all projects
+.DS_Store
+.env
+.vscode/
+.idea/
+
+# Monorepo-specific build files
+dist/
+node_modules/
