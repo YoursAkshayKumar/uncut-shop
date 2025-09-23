@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "overrides": {
     "react": "$react",
@@ -23,7 +24,7 @@
     "chart.js": "^4.4.7",
     "cloudinary": "^1.37.0",
     "dayjs": "^1.11.7",
-    "eslint": "8.41.0",
+    "eslint": "^9.36.0",
     "eslint-config-next": "13.4.4",
     "js-cookie": "^3.0.5",
     "next": "13.4.4",
@@ -48,6 +49,9 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@types/js-cookie": "^3.0.3"
+    "@eslint/js": "^9.36.0",
+    "@types/js-cookie": "^3.0.3",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.4.0"
   }
 }
