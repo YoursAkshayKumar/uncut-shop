@@ -5,16 +5,6 @@ import { notifyError, notifySuccess } from "@/utils/toast";
 import { useAddCouponMutation, useEditCouponMutation, useGetCouponQuery } from "@/redux/coupon/couponApi";
 import dayjs from "dayjs";
 
-// 1. Define the structure of your form data with a TypeScript interface
-interface CouponFormData {
-  name: string;
-  code: string;
-  endtime: string;
-  discountpercentage: number;
-  minimumamount: number;
-  // Note: 'selectProductType' is a state, not part of the form, so it's not in this interface.
-}
-
 const useCouponSubmit = () => {
   const [logo, setLogo] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -24,9 +14,9 @@ const useCouponSubmit = () => {
   const router = useRouter();
 
   // add coupon
-  const [addCoupon, {}] = useAddCouponMutation();
+  const [addCoupon, { }] = useAddCouponMutation();
   // edit coupon
-  const [editCoupon, {}] = useEditCouponMutation();
+  const [editCoupon, { }] = useEditCouponMutation();
   // react hook form
   const {
     register,
@@ -34,18 +24,18 @@ const useCouponSubmit = () => {
     formState: { errors },
     reset,
     control,
-  } = useForm<CouponFormData>(); // 2. Apply the interface here.
+  } = useForm();
+
 
   useEffect(() => {
     if (!openSidebar) {
-      setLogo("");
+      setLogo("")
       setSelectProductType("");
       reset();
     }
-  }, [openSidebar, reset]);
-
+  }, [openSidebar, reset])
   // submit handle
-  const handleCouponSubmit = async (data: CouponFormData) => { // 3. Use the interface here
+  const handleCouponSubmit = async (data: any) => {
     try {
       const coupon_data = {
         logo: logo,
@@ -68,7 +58,7 @@ const useCouponSubmit = () => {
       } else {
         notifySuccess("Coupon added successfully");
         setIsSubmitted(true);
-        setLogo("");
+        setLogo("")
         setOpenSidebar(false);
         setSelectProductType("");
         reset();
@@ -79,8 +69,8 @@ const useCouponSubmit = () => {
     }
   };
 
-  // handle Submit edit Category
-  const handleSubmitEditCoupon = async (data: CouponFormData, id: string) => { // 4. And here
+   //handle Submit edit Category
+   const handleSubmitEditCoupon = async (data: any, id: string) => {
     try {
       const coupon_data = {
         logo: logo,
@@ -101,7 +91,7 @@ const useCouponSubmit = () => {
         }
       } else {
         notifySuccess("Coupon update successfully");
-        router.push('/coupon');
+        router.push('/coupon')
         setIsSubmitted(true);
         reset();
       }
