@@ -1,28 +1,32 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// 1. Import necessary types from react-hook-form
-import { useForm, UseFormHandleSubmit, UseFormRegister, FieldErrors, Control } from "react-hook-form";
+import {
+  useForm,
+  UseFormHandleSubmit,
+  UseFormRegister,
+  FieldErrors,
+  Control,
+  SubmitHandler,
+} from "react-hook-form";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import { useAddCouponMutation, useEditCouponMutation, useGetCouponQuery } from "@/redux/coupon/couponApi";
+import {
+  useAddCouponMutation,
+  useEditCouponMutation,
+} from "@/redux/coupon/couponApi";
 import dayjs from "dayjs";
 
-// 🎯 Step 1: Define the Form Data Interface
-// This interface MUST match the field names used in your input components.
-// Note: The fields are lowercased and joined in your handleCouponSubmit logic, 
-// but the RHF 'name' attributes (e.g., 'Name', 'Code') need to be consistent.
+// 🎯 Define the Form Data interface
 export interface CouponFormData {
-  Name: string; 
+  Name: string;
   Code: string;
   endTime: string;
   discountPercentage: string;
   minimumAmount: string;
-  // If product type is handled by 'control' but not directly registered, it's fine.
-  // If you register a field for product type, add it here (e.g., productType: string).
 }
 
-// 🎯 Step 2: Define the Hook's Return Type for consistency (optional but recommended)
+// 🎯 Define the Hook return type
 interface UseCouponSubmitReturn {
-  handleCouponSubmit: (data: CouponFormData) => Promise<void>;
+  handleCouponSubmit: SubmitHandler<CouponFormData>;
   handleSubmitEditCoupon: (data: CouponFormData, id: string) => Promise<void>;
   isSubmitted: boolean;
   setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,17 +37,13 @@ interface UseCouponSubmitReturn {
   selectProductType: string;
   setSelectProductType: React.Dispatch<React.SetStateAction<string>>;
   setEditId: React.Dispatch<React.SetStateAction<string>>;
-  
-  // Strongly typed react-hook-form values
   register: UseFormRegister<CouponFormData>;
-  handleSubmit: UseFormHandleSubmit<CouponFormData, undefined>;
+  handleSubmit: UseFormHandleSubmit<CouponFormData>;
   errors: FieldErrors<CouponFormData>;
   control: Control<CouponFormData>;
 }
 
-
-// Change hook return type to the defined interface
-const useCouponSubmit = (): UseCouponSubmitReturn => { 
+const useCouponSubmit = (): UseCouponSubmitReturn => {
   const [logo, setLogo] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
@@ -51,39 +51,33 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
   const [editId, setEditId] = useState<string>("");
   const router = useRouter();
 
-  // add coupon
-  const [addCoupon, { }] = useAddCouponMutation();
-  // edit coupon
-  const [editCoupon, { }] = useEditCouponMutation();
-  
-  // 🎯 FIX 6: Apply the CouponFormData type to useForm()
+  const [addCoupon] = useAddCouponMutation();
+  const [editCoupon] = useEditCouponMutation();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     control,
-  } = useForm<CouponFormData>(); // <--- KEY CHANGE HERE
+  } = useForm<CouponFormData>();
 
-  // ... (useEffect remains the same)
   useEffect(() => {
     if (!openSidebar) {
-      setLogo("")
+      setLogo("");
       setSelectProductType("");
       reset();
     }
-  }, [openSidebar, reset])
-  
-  // submit handle
-  // 🎯 FIX 7: Use CouponFormData for the data argument
-  const handleCouponSubmit = async (data: CouponFormData) => {
+  }, [openSidebar, reset]);
+
+  // ✅ Strictly typed handler
+  const handleCouponSubmit: SubmitHandler<CouponFormData> = async (data) => {
     try {
       const coupon_data = {
-        logo: logo,
-        // Ensure property names here match the backend expectations (lowercase/camelCase)
-        title: data.Name, 
+        logo,
+        title: data.Name,
         couponCode: data.Code,
-        endTime: dayjs(data.endTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+        endTime: dayjs(data.endTime).format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
         discountPercentage: data.discountPercentage,
         minimumAmount: data.minimumAmount,
         productType: selectProductType,
@@ -100,27 +94,24 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
       } else {
         notifySuccess("Coupon added successfully");
         setIsSubmitted(true);
-        setLogo("")
+        setLogo("");
         setOpenSidebar(false);
         setSelectProductType("");
         reset();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       notifyError("Something went wrong");
     }
   };
 
-    //handle Submit edit Category
-    // 🎯 FIX 8: Use CouponFormData for the data argument
-    const handleSubmitEditCoupon = async (data: CouponFormData, id: string) => {
+  const handleSubmitEditCoupon = async (data: CouponFormData, id: string) => {
     try {
       const coupon_data = {
-        logo: logo,
-        // Ensure property names here match the backend expectations
-        title: data.Name, 
+        logo,
+        title: data.Name,
         couponCode: data.Code,
-        endTime: dayjs(data.endTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+        endTime: dayjs(data.endTime).format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
         discountPercentage: data.discountPercentage,
         minimumAmount: data.minimumAmount,
         productType: selectProductType,
@@ -134,19 +125,20 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
           }
         }
       } else {
-        notifySuccess("Coupon update successfully");
-        router.push('/coupon')
+        notifySuccess("Coupon updated successfully");
+        router.push("/coupon");
         setIsSubmitted(true);
         reset();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       notifyError("Something went wrong");
     }
   };
 
   return {
     handleCouponSubmit,
+    handleSubmitEditCoupon,
     isSubmitted,
     setIsSubmitted,
     logo,
@@ -159,7 +151,6 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
     control,
     selectProductType,
     setSelectProductType,
-    handleSubmitEditCoupon,
     setEditId,
   };
 };
