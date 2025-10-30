@@ -4,7 +4,7 @@ import Wrapper from "@layout/wrapper";
 import ContactArea from "@components/contact/contact-area";
 
 export const metadata = {
-  title: "Contact - Harri Shop",
+  title: "Contact- Uncut Designs",
 };
 
 export default function Contact() {

@@ -2,7 +2,7 @@ import ForgotPasswordArea from "@components/forget-password-area";
 
 
 export const metadata = {
-  title: "Forgot Password - Harri Shop",
+  title: "Forgot Password- Uncut Designs",
 };
 
 const ForgotPassword = async ({ params }) => {

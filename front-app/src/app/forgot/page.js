@@ -4,7 +4,7 @@ import Wrapper from "@layout/wrapper";
 import ForgotArea from "@components/forgot/forgot-area";
 
 export const metadata = {
-  title: "Forgot - Harri Shop",
+  title: "Forgot- Uncut Designs",
 };
 
 export default function Forgot() {
