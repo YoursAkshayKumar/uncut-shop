@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 // internal
-import logo from '@assets/img/logo/logo-black.svg';
+import logo from '@assets/img/logo/Uncut-logo.png';
 import payment from '@assets/img/footer/footer-payment.png';
 import SocialLinks from "@components/social";
 import CopyrightText from "./copyright-text";
@@ -43,15 +43,14 @@ const Footer = () => {
                   <div className="footer__widget footer__widget-11 mb-50 footer-col-11-1">
                     <div className="footer__logo">
                       <Link href="/">
-                        <Image src={logo} alt="logo" />
+                        <Image src={logo} alt="logo" width={100} height={80}  />
                       </Link>
                     </div>
 
                     <div className="footer__widget-content">
                       <div className="footer__info">
                         <p>
-                          The home and elements needed to create beautiful
-                          products.
+                          The inspiration and the essential pieces you need to define your look.
                         </p>
                         <div className="footer__social footer__social-11">
                           <SocialLinks/>
@@ -61,23 +60,23 @@ const Footer = () => {
                   </div>
                 </div>
 
-                <SingleWidget
+                {/* <SingleWidget
                   col="2"
                   col_2="4"
                   col_3="2"
                   title="Company"
                   contents={[
-                    { url: "#", title: "About us" },
+                    { url: "/about", title: "About us" },
                     { url: "#", title: "Careers" },
                     { url: "#", title: "Store Locations" },
                     { url: "#", title: "Our Blog" },
                     { url: "#", title: "Reviews" },
                   ]}
-                />
+                /> */}
                 <SingleWidget
                   col="3"
                   col_2="3"
-                  col_3="3"
+                  col_3="2"
                   title="Shop"
                   contents={[
                     { url: "#", title: "Game & Video" },
@@ -88,9 +87,9 @@ const Footer = () => {
                   ]}
                 />
                 <SingleWidget
-                  col="1"
+                  col="3"
                   col_2="3"
-                  col_3="4"
+                  col_3="3"
                   title="Support"
                   contents={[
                     { url: "", title: "FAQs" },
@@ -113,13 +112,13 @@ const Footer = () => {
                       <div className="footer__contact">
                         <div className="footer__contact-call">
                           <span>
-                            <a href="tel:624-423-26-72">+624 423 26 72</a>
+                            <a href="tel:918445432575">+91-8445432575</a>
                           </span>
                         </div>
                         <div className="footer__contact-mail">
                           <span>
-                            <a href="mailto:support@harry.com">
-                              support@harry.com
+                            <a href="mailto:support@uncut-design.com">
+                              support@uncut-design.com
                             </a>
                           </span>
                         </div>

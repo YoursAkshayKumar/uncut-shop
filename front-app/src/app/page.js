@@ -22,7 +22,7 @@ const HomeShop = () => {
       <HeroBanner />
       <ShopCategoryArea />
       <ShopProducts />
-      <OfferPopularProduct />
+      {/* <OfferPopularProduct /> */}
       <ShopBanner />
       <ShopFeature />
       <ShopCta />

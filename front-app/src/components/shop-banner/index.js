@@ -11,15 +11,15 @@ const ShopBanner = () => {
           <div className="row">
             <div className="col-xl-5 col-lg-6 col-md-8">
               <div className="banner__content">
-                <span>Apple iPhone 12 Pro</span>
+                <span>Premium Cotton T-Shirt</span>
                 <h3 className="banner__title">
-                  <Link href="/shop">The wait is on: iphone 12 max pro</Link>
+                  <Link href="/shop">The Last Day: Grab Your Fit</Link>
                 </h3>
-                <p>Last call for up to <span>32%</span> off! </p>
+                <p>Get 30% Off All Graphic T-Shirt</p>
 
                 <div className="banner__btn">
                   <Link href="/shop" className="tp-btn">
-                    Buy Now
+                    Claim The Offer
                     <RightArrow/>
                   </Link>
                 </div>

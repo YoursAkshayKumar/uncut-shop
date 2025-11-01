@@ -15,12 +15,12 @@ const slider_data = [
     id: 1,
     pre_title: (
       <>
-        Best Ear <br /> Headphones
+        Your Style. <br /> Your Story.
       </>
     ),
     title: (
       <>
-        Find Best <br /> Matley Sound.
+        Clothes To <br /> Fit Your Life.
       </>
     ),
     img: slider_img_1,
@@ -29,12 +29,12 @@ const slider_data = [
     id: 2,
     pre_title: (
       <>
-        Best Ear <br /> Headphones
+        Your Style. <br /> Your Story.
       </>
     ),
     title: (
       <>
-        Find your <br /> Beats Studio.
+        Clothes To <br /> Fit Your Life.
       </>
     ),
     img: slider_img_2,
@@ -43,12 +43,12 @@ const slider_data = [
     id: 3,
     pre_title: (
       <>
-        Best Ear <br /> Headphones
+        Your Style. <br /> Your Story.
       </>
     ),
     title: (
       <>
-        Music To <br /> Fill Your Heart
+        Clothes To <br /> Fit Your Life.
       </>
     ),
     img: slider_img_3,
@@ -85,7 +85,7 @@ const HeroBanner = () => {
 
                       <div className="slider__btn-13 ">
                         <Link href="/shop" className="tp-btn-border">
-                          Shop Now
+                          Explore The Collection
                           <span>
                             <RightArrow />
                           </span>
