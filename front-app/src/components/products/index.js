@@ -39,7 +39,7 @@ const ShopProducts = () => {
     const prd_items = products.products;
     const show_prd = prd_items.filter((item) => item.itemInfo === activeTab);
     content = show_prd.map((product) => (
-      <div key={product._id} className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+      <div key={product._id} className="col-xl-3 col-lg-4 col-md-4 col-6">
         <SingleProduct product={product} />
       </div>
     ));

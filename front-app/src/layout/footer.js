@@ -118,7 +118,7 @@ const Footer = () => {
                         <div className="footer__contact-mail">
                           <span>
                             <a href="mailto:support@uncut-design.com">
-                              support@uncut-design.com
+                              support@uncutsdesign.com
                             </a>
                           </span>
                         </div>
