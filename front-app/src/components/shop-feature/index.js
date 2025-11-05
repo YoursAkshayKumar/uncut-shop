@@ -29,7 +29,7 @@ const ShopFeature = () => {
               title="Free Shipping"
               subtitle={
                 <>
-                  Free Shipping for orders <br /> over $120
+                  Free Shipping for orders <br /> over ₹120
                 </>
               }
             />

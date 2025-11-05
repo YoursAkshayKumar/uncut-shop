@@ -64,7 +64,7 @@ const SingleWishlist = ({ item }) => {
       </td>
       <td className="product-subtotal">
         <span className="amount">
-          $
+          ₹
           {isAddToCart?.orderQuantity
             ? (originalPrice * isAddToCart?.orderQuantity).toFixed(2)
             : (originalPrice * 0).toFixed(2)}

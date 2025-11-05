@@ -76,14 +76,14 @@ export default function InvoiceArea({innerRef,info}) {
                 <Td>{item.title}</Td>
                 <Td>{item.orderQuantity}</Td>
                 <Td>
-                  $
+                  ₹
                   {item?.discount
                     ? item.originalPrice -
                       (item.originalPrice * item.discount) / 100
                     : item.originalPrice}
                 </Td>
                 <Td>
-                  $
+                  ₹
                   {item?.discount
                     ? (item.originalPrice -
                         (item.originalPrice * item.discount) / 100) *

@@ -63,7 +63,7 @@ const SingleListProduct = ({ product }) => {
               </div>
               <p>
                 Shop Harry.com for every day low prices. Free shipping on orders
-                $35+ or Pickup In-store and get
+                ₹35+ or Pickup In-store and get
               </p>
 
               <div className="product__list-action d-flex flex-wrap align-items-center">

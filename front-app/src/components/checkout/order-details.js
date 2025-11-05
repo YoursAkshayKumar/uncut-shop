@@ -39,7 +39,7 @@ const OrderDetails = ({
                 onClick={() => handleShippingCost(60)}
                 htmlFor="flat_shipping"
               >
-                <span className="amount">Delivery: Today Cost : $60.00</span>
+                <span className="amount">Delivery: Today Cost : ₹60.00</span>
               </label>
               <ErrorMessage message={errors?.shippingOption?.message} />
             </li>
@@ -57,7 +57,7 @@ const OrderDetails = ({
                 onClick={() => handleShippingCost(20)}
                 htmlFor="free_shipping"
               >
-                Delivery: 7 Days Cost : $20.00
+                Delivery: 7 Days Cost : ₹20.00
               </label>
               <ErrorMessage message={errors?.shippingOption?.message} />
             </li>
