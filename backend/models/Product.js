@@ -85,8 +85,14 @@ const productSchema = mongoose.Schema({
     required: true,
   },
   colors:[String],
-  type:String,
-  itemInfo:String,
+  type:{
+    type: String,
+    default: "Cloth"
+  },
+  itemInfo: {
+    type: String,
+    default: "latest-product"
+  },
   status: {
     type: String,
     default: 'active',
