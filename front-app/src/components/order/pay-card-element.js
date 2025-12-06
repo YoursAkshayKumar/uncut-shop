@@ -1,32 +1,18 @@
-import React, { useState } from "react";
-import { CardElement } from "@stripe/react-stripe-js";
+import React from "react";
 
-const PaymentCardElement = ({ stripe, cardError, cart_products,isCheckoutSubmit }) => {
+const PaymentCardElement = ({ cardError, cart_products, isCheckoutSubmit, razorpayLoaded }) => {
   return (
     <div className="my-2">
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: "16px",
-              color: "#424770",
-              "::placeholder": {
-                color: "#aab7c4",
-              },
-            },
-            invalid: {
-              color: "#9e2146",
-            },
-          },
-        }}
-      />
+      <div className="payment-info">
+        <p>You will be redirected to Razorpay secure payment gateway to complete your payment.</p>
+      </div>
       <div className="order-button-payment mt-25">
         <button
           type="submit"
           className="tp-btn"
-          disabled={!stripe || cart_products.length === 0 || isCheckoutSubmit}
+          disabled={!razorpayLoaded || cart_products.length === 0 || isCheckoutSubmit}
         >
-          Place order
+          {isCheckoutSubmit ? "Processing..." : "Place order"}
         </button>
       </div>
       {cardError && (

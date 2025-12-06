@@ -15,12 +15,20 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          dispatch(set_client_secret(result.clientSecret));
+          // For Razorpay, we store the orderId instead of clientSecret
+          dispatch(set_client_secret(result.data?.orderId || result.data?.order_id));
         } catch (err) {
           // do nothing
         }
       },
 
+    }),
+    verifyPayment: builder.mutation({
+      query: (data) => ({
+        url: "api/order/verify-payment",
+        method: "POST",
+        body: data,
+      }),
     }),
     addOrder: builder.mutation({
       query: (data) => ({
@@ -48,5 +56,6 @@ export const authApi = apiSlice.injectEndpoints({
 
 export const {
   useCreatePaymentIntentMutation,
+  useVerifyPaymentMutation,
   useAddOrderMutation,
 } = authApi;

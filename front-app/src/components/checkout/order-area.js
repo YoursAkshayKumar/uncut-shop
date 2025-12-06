@@ -6,7 +6,6 @@ import PaymentCardElement from "@components/order/pay-card-element";
 import OrderSingleCartItem from "./order-single-cart-item";
 
 const OrderArea = ({
-  stripe,
   error,
   register,
   errors,
@@ -14,8 +13,8 @@ const OrderArea = ({
   shippingCost,
   cartTotal,
   handleShippingCost,
-  setClientSecret,
   isCheckoutSubmit,
+  razorpayLoaded,
 }) => {
   const { cart_products } = useSelector((state) => state.cart);
   return (
@@ -47,7 +46,6 @@ const OrderArea = ({
               cartTotal={cartTotal}
               shippingCost={shippingCost}
               handleShippingCost={handleShippingCost}
-              setClientSecret={setClientSecret}
             />
           </tfoot>
         </table>
@@ -65,7 +63,7 @@ const OrderArea = ({
                 aria-expanded="true"
                 aria-controls="bankOne"
               >
-                Direct Bank Transfer
+                Razorpay Payment
                 <span className="accordion-btn"></span>
               </button>
             </h2>
@@ -77,10 +75,10 @@ const OrderArea = ({
             >
               <div className="accordion-body">
                 <PaymentCardElement
-                  stripe={stripe}
                   cardError={error}
                   cart_products={cart_products}
                   isCheckoutSubmit={isCheckoutSubmit}
+                  razorpayLoaded={razorpayLoaded}
                 />
               </div>
             </div>

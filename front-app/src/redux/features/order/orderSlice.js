@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   shipping_info: {},
-  stripe_client_secret:"",
+  razorpay_order_id:"",
 };
 
 export const orderSlice = createSlice({
@@ -26,7 +26,7 @@ export const orderSlice = createSlice({
       
     },
     set_client_secret:(state,{payload}) => {
-      state.stripe_client_secret = payload;
+      state.razorpay_order_id = payload;
     }
   },
 });

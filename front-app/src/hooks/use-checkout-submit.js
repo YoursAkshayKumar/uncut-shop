@@ -2,7 +2,6 @@
 import * as dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 //internal import
@@ -15,12 +14,14 @@ import { set_shipping } from "src/redux/features/order/orderSlice";
 import {
   useAddOrderMutation,
   useCreatePaymentIntentMutation,
+  useVerifyPaymentMutation,
 } from "src/redux/features/order/orderApi";
 
 const useCheckoutSubmit = () => {
   const { data: offerCoupons, isError, isLoading } = useGetOfferCouponsQuery();
   const [addOrder, {}] = useAddOrderMutation();
   const [createPaymentIntent, {}] = useCreatePaymentIntentMutation();
+  const [verifyPayment, {}] = useVerifyPaymentMutation();
   const { cart_products } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
   const { shipping_info } = useSelector((state) => state.order);
@@ -34,12 +35,11 @@ const useCheckoutSubmit = () => {
   const [discountProductType, setDiscountProductType] = useState("");
   const [isCheckoutSubmit, setIsCheckoutSubmit] = useState(false);
   const [cardError, setCardError] = useState("");
-  const [clientSecret, setClientSecret] = useState("");
+  const [razorpayOrderId, setRazorpayOrderId] = useState("");
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   
   const dispatch = useDispatch();
   const router = useRouter();
-  const stripe = useStripe();
-  const elements = useElements();
 
   const {
     register,
@@ -94,21 +94,36 @@ const useCheckoutSubmit = () => {
     cartTotal,
   ]);
 
-  // create payment intent
+  // Load Razorpay script
   useEffect(() => {
-    if (cartTotal) {
+    if (typeof window !== "undefined" && !razorpayLoaded) {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.async = true;
+      script.onload = () => setRazorpayLoaded(true);
+      document.body.appendChild(script);
+      
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [razorpayLoaded]);
+
+  // create Razorpay order
+  useEffect(() => {
+    if (cartTotal && razorpayLoaded) {
       createPaymentIntent({
         price: parseInt(cartTotal),
       })
         .then((data) => {
-          setClientSecret(data.data.clientSecret);
-          console.log(data);
+          setRazorpayOrderId(data.data?.orderId || data.data?.order_id);
         })
-        .then((error) => {
+        .catch((error) => {
           console.log(error);
+          notifyError("Failed to initialize payment");
         });
     }
-  }, [createPaymentIntent, cartTotal]);
+  }, [createPaymentIntent, cartTotal, razorpayLoaded]);
 
   // handleCouponCode
   const handleCouponCode = (e) => {
@@ -194,73 +209,89 @@ const useCheckoutSubmit = () => {
       totalAmount: cartTotal,
       user:`${user?._id}`
     };
-    if (!stripe || !elements) {
-      return;
-    }
-    const card = elements.getElement(CardElement);
-    if (card == null) {
-      return;
-    }
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card,
-    });
 
-    if (error) {
-      setCardError(error?.message);
-      setIsCheckoutSubmit(false);
-    } else {
-      setCardError("");
-      const orderData = {
-        ...orderInfo,
-        cardInfo: paymentMethod,
-      };
-      handlePaymentWithStripe(orderData);
+    if (!razorpayOrderId) {
+      notifyError("Payment not initialized. Please try again.");
       setIsCheckoutSubmit(false);
       return;
     }
+
+    if (typeof window === "undefined" || !window.Razorpay) {
+      notifyError("Razorpay SDK not loaded. Please refresh the page.");
+      setIsCheckoutSubmit(false);
+      return;
+    }
+
+    handlePaymentWithRazorpay(orderInfo);
+    setIsCheckoutSubmit(false);
   };
 
-  // handlePaymentWithStripe
-  const handlePaymentWithStripe = async (order) => {
+  // handlePaymentWithRazorpay
+  const handlePaymentWithRazorpay = async (orderInfo) => {
     try {
-      const { paymentIntent, error: intentErr } =
-        await stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: elements.getElement(CardElement),
-            billing_details: {
-              name: user?.name,
-              email: user?.email,
-            },
-          },
-        });
-      if (intentErr) {
-        notifyError(intentErr.message);
-      } else {
-        // notifySuccess("Your payment processed successfully");
-      }
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: Math.round(cartTotal * 100), // Amount in paise
+        currency: "INR",
+        name: "Uncut Designs",
+        description: "Order Payment",
+        order_id: razorpayOrderId,
+        handler: async function (response) {
+          try {
+            // Verify payment on backend
+            const verifyResult = await verifyPayment({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }).unwrap();
 
-      const orderData = {
-        ...order,
-        paymentIntent,
+            if (verifyResult.success) {
+              const orderData = {
+                ...orderInfo,
+                paymentIntent: {
+                  id: response.razorpay_payment_id,
+                  order_id: response.razorpay_order_id,
+                  signature: response.razorpay_signature,
+                },
+              };
+
+              const result = await addOrder(orderData).unwrap();
+              
+              if (result?.success) {
+                router.push(`/order/${result.order?._id}`);
+                notifySuccess("Your Order Confirmed!");
+              } else {
+                notifyError("Order creation failed");
+              }
+            } else {
+              notifyError("Payment verification failed");
+            }
+          } catch (error) {
+            console.log(error);
+            notifyError("Payment verification failed");
+          }
+        },
+        prefill: {
+          name: user?.name || orderInfo.name,
+          email: user?.email || orderInfo.email,
+          contact: orderInfo.contact,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+        modal: {
+          ondismiss: function() {
+            setIsCheckoutSubmit(false);
+          },
+        },
       };
 
-      addOrder({
-        ...orderData,
-      })
-      .then((result) => {
-          if(result?.error){
-
-          }
-          else {
-            router.push(`/order/${result.data?.order?._id}`);
-            notifySuccess("Your Order Confirmed!");
-          }
-          if(result.data?.success){
-          }
-        })
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (err) {
       console.log(err);
+      notifyError("Failed to process payment");
+      setIsCheckoutSubmit(false);
     }
   };
 
@@ -279,12 +310,11 @@ const useCheckoutSubmit = () => {
     errors,
     cardError,
     submitHandler,
-    stripe,
     handleSubmit,
-    clientSecret,
-    setClientSecret,
+    razorpayOrderId,
+    setRazorpayOrderId,
     cartTotal,
-    isCheckoutSubmit,
+    razorpayLoaded,
   };
 };
 
