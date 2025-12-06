@@ -10,6 +10,7 @@ import ProductVariants from "../add-product/product-variants";
 import ProductImgUpload from "../add-product/product-img-upload";
 import Tags from "../add-product/tags";
 import ProductCategory from "../../category/product-category";
+import Colors from "../add-product/colors";
 
 const EditProductSubmit = ({ id }: { id: string }) => {
   const { data: product, isError, isLoading } = useGetProductQuery(id);
@@ -31,7 +32,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     setRelatedImages,
     setColors,
     colors,
-    handleEditProduct
+    handleEditProduct,
   } = useProductSubmit();
 
   // decide what to render
@@ -110,7 +111,6 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               </div>
             </div>
 
-
             {/* product type and brands start */}
             <ProductTypeBrand
               register={register}
@@ -163,6 +163,41 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                   default_value={product.tags}
                 />
               </div>
+            </div>
+
+            <div className="bg-white px-8 py-8 rounded-md mb-6">
+              <p className="mb-5 text-base text-black">Product Colors</p>
+              {/* tags start */}
+              <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
+                <Colors
+                  colors={colors}
+                  setColors={setColors}
+                  default_value={product.colors}
+                />
+              </div>
+            </div>
+
+            <div className="bg-white px-8 py-8 rounded-md mb-6">
+              <p className="mb-5 text-base text-black">
+                Item Info
+              </p>
+
+              <select
+                {...register("itemInfo", { required: false })}
+                defaultValue={product.itemInfo}
+                className="w-full border border-gray-300 rounded-md p-2"
+              >
+                <option value="">Select Type</option>
+                <option value="latest-product">Latest Product</option>
+                <option value="top-rated">Top Rated</option>
+                <option value="best-selling">Best Selling</option>
+              </select>
+
+              {errors.itemInfo && (
+                <p className="text-red-500 text-sm mt-2">
+                  This field is required
+                </p>
+              )}
             </div>
           </div>
         </div>

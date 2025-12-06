@@ -49,9 +49,11 @@ const ProductType = ({errors,control,default_value,setSelectProductType,options}
                     value: 0,
                   }
             }
-            onChange={(selectedOption) => {
+            onChange={(selectedOption: { value: string; label: string } | null) => {
               field.onChange(selectedOption);
-              handleSelectProduct(selectedOption?.value);
+              if (selectedOption?.value) {
+                handleSelectProduct(selectedOption.value);
+              }
             }}
             options={options}
           />

@@ -112,3 +112,15 @@ input[type=number] {
 .pagination ul.list-wrap li.disabled {
    display: none;
 }
+
+.swal2-popup .swal2-styled {
+  color: #fff !important;     /* Button text color */
+}
+
+.swal2-confirm {
+  background-color: #3085d6 !important;
+}
+
+.swal2-cancel {
+  background-color: #d33 !important;
+}

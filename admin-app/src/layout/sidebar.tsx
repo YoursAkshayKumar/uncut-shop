@@ -39,15 +39,14 @@ export default function Sidebar({sideMenu,setSideMenu}:IProps) {
         className={`w-[300px] lg:w-[250px] xl:w-[300px] border-r border-gray overflow-y-auto sidebar-scrollbar fixed left-0 top-0 h-full bg-white z-50 transition-transform duration-300 ${sideMenu? "translate-x-[0px]" : " -translate-x-[300px] lg:translate-x-[0]"}`}
       >
         <div className="flex flex-col justify-between h-full">
-          <div >
-
+          <div>
             <div className="py-4 pb-8 px-8 border-b border-gray h-[78px]">
               <Link href="/dashboard">
                 <Image
-                  className="w-[140px]"
-                  width={140}
-                  height={43}
-                  src="/assets/img/logo/logo.svg"
+                  className="w-[80px]"
+                  width={80}
+                  height={40}
+                  src="/assets/img/logo/Uncut-logo.png"
                   alt="logo"
                   priority
                 />
@@ -94,7 +93,7 @@ export default function Sidebar({sideMenu,setSideMenu}:IProps) {
                     )}
                     {menu.title === 'Online store' && (
                       <a
-                        href="{process.env.NEXT_PUBLIC_ONLINE_STORE_URL}"
+                        href="https://hamart-shop.vercel.app"
                         target="_blank"
                         className={`group cursor-pointer rounded-md relative text-black text-lg font-medium inline-flex items-center w-full transition-colors ease-in-out duration-300 px-5 py-[9px] mb-2 hover:bg-gray sidebar-link-active`}
                       >

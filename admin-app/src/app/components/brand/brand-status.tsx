@@ -12,7 +12,7 @@ const BrandStatus = ({ handleChange ,default_value}: IPropType) => {
     <div className="mb-5">
       <p className="mb-0 text-base text-black">Status</p>
       <ReactSelect
-        onChange={(value) => handleChange(value?.value)}
+        onChange={(value: { value: string; label: string } | null) => handleChange(value?.value)}
         options={[
           { value: "active", label: "Active" },
           { value: "inactive", label: "Inactive" },

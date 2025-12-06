@@ -82,20 +82,20 @@ const Header = ({ setSideMenu }: IProps) => {
           </div>
 
           <div className="flex items-center justify-end space-x-6">
-            <div className="md:hidden">
+            {/* <div className="md:hidden">
               <button className="relative w-[40px] h-[40px] leading-[40px] rounded-md text-textBody border border-gray hover:bg-themeLight hover:text-theme hover:border-themeLight">
                 <Search />
               </button>
             </div>
             <div className="relative">
-              {/* notification area start */}
+              {/* notification area start *
               <NotificationArea
                 nRef={nRef}
                 notificationOpen={notificationOpen}
                 handleNotificationOpen={handleNotificationOpen}
               />
-              {/* notification area end */}
-            </div>
+              {/* notification area end *
+            </div> */}
             <div
               ref={pRef}
               className="relative w-[70%] flex justify-end items-center"

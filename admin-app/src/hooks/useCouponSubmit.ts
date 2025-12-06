@@ -1,49 +1,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  useForm,
-  UseFormHandleSubmit,
-  UseFormRegister,
-  FieldErrors,
-  Control,
-  SubmitHandler,
-} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { notifyError, notifySuccess } from "@/utils/toast";
-import {
-  useAddCouponMutation,
-  useEditCouponMutation,
-} from "@/redux/coupon/couponApi";
+import { useAddCouponMutation, useEditCouponMutation, useGetCouponQuery } from "@/redux/coupon/couponApi";
 import dayjs from "dayjs";
 
-// 🎯 Define the Form Data interface
-export interface CouponFormData {
-  Name: string;
-  Code: string;
-  endTime: string;
-  discountPercentage: string;
-  minimumAmount: string;
-}
-
-// 🎯 Define the Hook return type
-interface UseCouponSubmitReturn {
-  handleCouponSubmit: SubmitHandler<CouponFormData>;
-  handleSubmitEditCoupon: (data: CouponFormData, id: string) => Promise<void>;
-  isSubmitted: boolean;
-  setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-  logo: string;
-  setLogo: React.Dispatch<React.SetStateAction<string>>;
-  openSidebar: boolean;
-  setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>;
-  selectProductType: string;
-  setSelectProductType: React.Dispatch<React.SetStateAction<string>>;
-  setEditId: React.Dispatch<React.SetStateAction<string>>;
-  register: UseFormRegister<CouponFormData>;
-  handleSubmit: UseFormHandleSubmit<CouponFormData>;
-  errors: FieldErrors<CouponFormData>;
-  control: Control<CouponFormData>;
-}
-
-const useCouponSubmit = (): UseCouponSubmitReturn => {
+const useCouponSubmit = () => {
   const [logo, setLogo] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
@@ -51,35 +13,37 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
   const [editId, setEditId] = useState<string>("");
   const router = useRouter();
 
-  const [addCoupon] = useAddCouponMutation();
-  const [editCoupon] = useEditCouponMutation();
-
+  // add coupon
+  const [addCoupon, { }] = useAddCouponMutation();
+  // edit coupon
+  const [editCoupon, { }] = useEditCouponMutation();
+  // react hook form
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     control,
-  } = useForm<CouponFormData>();
+  } = useForm<any>();
+
 
   useEffect(() => {
     if (!openSidebar) {
-      setLogo("");
+      setLogo("")
       setSelectProductType("");
       reset();
     }
-  }, [openSidebar, reset]);
-
-  // ✅ Strictly typed handler
-  const handleCouponSubmit: SubmitHandler<CouponFormData> = async (data) => {
+  }, [openSidebar, reset])
+  // submit handle
+  const handleCouponSubmit = async (data: any) => {
     try {
       const coupon_data = {
-        logo,
-        title: data.Name,
-        couponCode: data.Code,
-        endTime: dayjs(data.endTime).format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
-        discountPercentage: data.discountPercentage,
-        minimumAmount: data.minimumAmount,
+        logo: logo,
+        title: data?.name,
+        couponCode: data?.code,
+        endTime: dayjs(data.endtime).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+        discountPercentage: data?.discountpercentage,
+        minimumAmount: data?.minimumamount,
         productType: selectProductType,
       };
 
@@ -94,26 +58,27 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
       } else {
         notifySuccess("Coupon added successfully");
         setIsSubmitted(true);
-        setLogo("");
+        setLogo("")
         setOpenSidebar(false);
         setSelectProductType("");
         reset();
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       notifyError("Something went wrong");
     }
   };
 
-  const handleSubmitEditCoupon = async (data: CouponFormData, id: string) => {
+   //handle Submit edit Category
+   const handleSubmitEditCoupon = async (data: any, id: string) => {
     try {
       const coupon_data = {
-        logo,
-        title: data.Name,
-        couponCode: data.Code,
-        endTime: dayjs(data.endTime).format("YYYY-MM-DDTHH:mm:ss.SSSZ"),
-        discountPercentage: data.discountPercentage,
-        minimumAmount: data.minimumAmount,
+        logo: logo,
+        title: data?.name,
+        couponCode: data?.code,
+        endTime: dayjs(data.endtime).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+        discountPercentage: data?.discountpercentage,
+        minimumAmount: data?.minimumamount,
         productType: selectProductType,
       };
       const res = await editCoupon({ id, data: coupon_data });
@@ -125,20 +90,19 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
           }
         }
       } else {
-        notifySuccess("Coupon updated successfully");
-        router.push("/coupon");
+        notifySuccess("Coupon update successfully");
+        router.push('/coupon')
         setIsSubmitted(true);
         reset();
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       notifyError("Something went wrong");
     }
   };
 
   return {
     handleCouponSubmit,
-    handleSubmitEditCoupon,
     isSubmitted,
     setIsSubmitted,
     logo,
@@ -151,6 +115,7 @@ const useCouponSubmit = (): UseCouponSubmitReturn => {
     control,
     selectProductType,
     setSelectProductType,
+    handleSubmitEditCoupon,
     setEditId,
   };
 };

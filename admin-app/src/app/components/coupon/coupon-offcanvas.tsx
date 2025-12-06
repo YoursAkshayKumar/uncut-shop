@@ -12,20 +12,6 @@ import ProductType from "../products/add-product/product-type";
 import { useGetAllCategoriesQuery } from "@/redux/category/categoryApi";
 import ErrorMsg from "../common/error-msg";
 
-// 🎯 FIX 1: Define the Form Data Interface
-// This interface MUST match the fields you are registering in your useCouponSubmit hook.
-interface CouponFormData {
-  // Fields registered via CouponFormField:
-  Name: string; 
-  Code: string;
-  endTime: string;
-  discountPercentage: string;
-  minimumAmount: string;
-  // If ProductType registers a field, add it here (e.g., productType):
-  // productType: string; 
-}
-
-
 // prop type
 type IPropType = {
   propsItems: {
@@ -34,25 +20,13 @@ type IPropType = {
     setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectProductType: React.Dispatch<React.SetStateAction<string>>;
     setLogo: React.Dispatch<React.SetStateAction<string>>;
-    
-    // 🎯 FIX 2: Use CouponFormData instead of 'any'
-    handleCouponSubmit: (data: CouponFormData) => void;
-    
+    handleCouponSubmit: (data: any) => void;
     isSubmitted: boolean;
-    
-    // 🎯 FIX 3: Use CouponFormData instead of 'any'
-    register: UseFormRegister<CouponFormData>;
-    
-    // 🎯 FIX 4: Use CouponFormData instead of 'any'
-    errors: FieldErrors<CouponFormData>;
-    
+    register: UseFormRegister<any>;
+    errors: FieldErrors<any>;
     logo: string;
-    
-    // 🎯 FIX 5: Use CouponFormData instead of 'any' for handleSubmit
-    handleSubmit: UseFormHandleSubmit<CouponFormData, undefined>;
-    
-    // 🎯 FIX 6: Use CouponFormData for Control
-    control: Control<CouponFormData>;
+    handleSubmit: UseFormHandleSubmit<any, undefined>;
+    control: Control;
   };
 };
 
@@ -81,13 +55,11 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
     content = <ErrorMsg msg="Failed to load product type" />;
   }
   if (!isError && !isLoading && categories) {
-    // NOTE: This component is receiving 'errors' and 'control' which are typed with CouponFormData.
-    // Ensure the ProductType component can handle Control<CouponFormData> and FieldErrors<CouponFormData>.
     content = (
       <ProductType
         setSelectProductType={setSelectProductType}
-        control={control as Control<any>} // Temporarily cast if ProductType is not generic
-        errors={errors as FieldErrors<any>} // Temporarily cast if ProductType is not generic
+        control={control}
+        errors={errors}
         options={categories.result.map((item) => {
           return { value: item.parent, label: item.parent };
         })}
@@ -97,7 +69,7 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
   return (
     <>
       <div
-        className={`offcanvas-area fixed top-0 right-0 h-full bg-white w-[280px] sm:w-[400px] z-[999] overflow-y-scroll overscroll-y-contain scrollbar-hide shadow-md translate-x-[calc(100%+80px)]  transition duration-300 ${
+        className={`offcanvas-area fixed top-0 right-0 h-full bg-white w-[280px] sm:w-[400px] z-[999] overflow-y-scroll overscroll-y-contain scrollbar-hide shadow-md translate-x-[calc(100%+80px)]  transition duration-300 ${
           openSidebar ? "offcanvas-opened" : ""
         }`}
       >
@@ -115,7 +87,7 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
                 Enter Coupon Details
               </p>
             </div>
-            {/* */}
+            {/* <!-- main content --> */}
             <div className="px-8 pt-6">
               <div className="">
                 {/* coupon image upload */}

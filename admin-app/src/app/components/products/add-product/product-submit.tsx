@@ -34,7 +34,7 @@ const ProductSubmit = () => {
     colors,
   } = useProductSubmit();
 
-  console.log('related image',relatedImages)
+  console.log("related image", relatedImages);
   return (
     <form onSubmit={handleSubmit(handleSubmitProduct)}>
       <div className="grid grid-cols-12 gap-6 mb-6">
@@ -144,6 +144,19 @@ const ProductSubmit = () => {
             <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
               <Colors colors={colors} setColors={setColors} />
             </div>
+          </div>
+
+          <div className="bg-white px-8 py-8 rounded-md mb-6">
+            <p className="mb-5 text-base text-black">Item Info</p>
+            <select
+              {...register("itemInfo", { required: false })}
+              className="w-full border border-gray-300 rounded-md p-2"
+            >
+              <option value="">Select Type</option>
+              <option value="latest-product">Latest Product</option>
+              <option value="top-rated">Top Rated</option>
+              <option value="best-selling">Best Selling</option>
+            </select>
           </div>
         </div>
       </div>
