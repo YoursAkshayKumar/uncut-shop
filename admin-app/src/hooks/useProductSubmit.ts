@@ -45,7 +45,6 @@ const useProductSubmit = () => {
 
   // handle submit product
   const handleSubmitProduct = async (data: any) => {
-    console.log('data', data)
     // product data
     const productData: IAddProduct = {
       sku: data.sku,
@@ -67,7 +66,6 @@ const useProductSubmit = () => {
       type: data.type || "Cloth",
       itemInfo: data.itemInfo || "latest-product",
     };
-    console.log('productData-------------------..>', productData)
     if (!img) {
       return notifyError("Product image is required");
     }

@@ -1,4 +1,7 @@
-import colors from 'tailwindcss/colors';
+// Import colors and exclude deprecated ones to silence warnings
+const allColors = require('tailwindcss/colors');
+const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...colors } = allColors;
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [

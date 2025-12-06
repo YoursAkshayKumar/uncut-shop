@@ -10,9 +10,9 @@ const useBrandSubmit = () => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const router = useRouter();
   // add
-  const [addBrand,{ data:brandData }] = useAddBrandMutation();
-  // add
-  const [editBrand, { data: brandEditData}] = useEditBrandMutation();
+  const [addBrand] = useAddBrandMutation();
+  // edit
+  const [editBrand] = useEditBrandMutation();
 
   // react hook form
   const {
@@ -49,7 +49,6 @@ const useBrandSubmit = () => {
         setLogo("");
       }
     } catch (error) {
-      console.log(error);
       notifyError("Something went wrong");
     }
   };
@@ -81,7 +80,6 @@ const useBrandSubmit = () => {
         reset();
       }
     } catch (error) {
-      console.log(error);
       notifyError("Something went wrong");
     }
   };

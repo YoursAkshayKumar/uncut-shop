@@ -10,13 +10,12 @@ const useCouponSubmit = () => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [openSidebar, setOpenSidebar] = useState<boolean>(false);
   const [selectProductType, setSelectProductType] = useState<string>("");
-  const [editId, setEditId] = useState<string>("");
   const router = useRouter();
 
   // add coupon
-  const [addCoupon, { }] = useAddCouponMutation();
+  const [addCoupon] = useAddCouponMutation();
   // edit coupon
-  const [editCoupon, { }] = useEditCouponMutation();
+  const [editCoupon] = useEditCouponMutation();
   // react hook form
   const {
     register,
@@ -64,7 +63,6 @@ const useCouponSubmit = () => {
         reset();
       }
     } catch (error) {
-      console.log(error);
       notifyError("Something went wrong");
     }
   };
@@ -96,7 +94,6 @@ const useCouponSubmit = () => {
         reset();
       }
     } catch (error) {
-      console.log(error);
       notifyError("Something went wrong");
     }
   };
@@ -116,7 +113,6 @@ const useCouponSubmit = () => {
     selectProductType,
     setSelectProductType,
     handleSubmitEditCoupon,
-    setEditId,
   };
 };
 

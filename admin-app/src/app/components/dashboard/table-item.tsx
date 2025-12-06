@@ -6,8 +6,6 @@ import OrderStatusChange from "../orders/status-change";
 
 const TableItem = (props: { order: IOrder }) => {
   const { order } = props;
-  console.log('order',order)
-  console.log(order.createdAt)
   const p_method =
     order.paymentMethod === "COD"
       ? "Cash"

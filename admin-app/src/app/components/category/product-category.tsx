@@ -93,7 +93,7 @@ export default function ProductCategory({
                   onClick={() => handleCategory(item._id, item.parent)}
                   className="border-b-0 p-3 relative"
                 >
-                  <h5 color="blue-gray" className="mr-auto font-medium mb-0 page-title cursor-pointer">
+                  <h5 className="mr-auto font-medium mb-0 page-title cursor-pointer">
                     {item.parent}
                   </h5>
                   <span className="absolute top-0 right-0 px-3">

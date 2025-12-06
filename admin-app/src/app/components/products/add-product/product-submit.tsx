@@ -34,7 +34,6 @@ const ProductSubmit = () => {
     colors,
   } = useProductSubmit();
 
-  console.log("related image", relatedImages);
   return (
     <form onSubmit={handleSubmit(handleSubmitProduct)}>
       <div className="grid grid-cols-12 gap-6 mb-6">

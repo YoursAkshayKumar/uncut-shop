@@ -13,9 +13,9 @@ const useCategorySubmit = () => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const router = useRouter();
   // add
-  const [addCategory,{}] = useAddCategoryMutation();
+  const [addCategory] = useAddCategoryMutation();
   // edit
-  const [editCategory,{ }] = useEditCategoryMutation();
+  const [editCategory] = useEditCategoryMutation();
 
   // react hook form
   const {
@@ -55,7 +55,6 @@ const useCategorySubmit = () => {
         setCategoryImg("");
       }
     } catch (error) {
-      console.log(error);
       notifyError("Something went wrong");
     }
   };
@@ -87,7 +86,6 @@ const useCategorySubmit = () => {
         reset();
       }
     } catch (error) {
-      console.log(error);
       notifyError("Something went wrong");
     }
   };
