@@ -2,15 +2,27 @@ const { secret } = require("../config/secret");
 const Razorpay = require("razorpay");
 const Order = require("../models/Order");
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: secret.razorpay_key_id,
-  key_secret: secret.razorpay_key_secret,
-});
+const hasRazorpayConfig =
+  Boolean(secret.razorpay_key_id) && Boolean(secret.razorpay_key_secret);
+
+// Lazily create Razorpay client so the app can still boot when keys are absent.
+const createRazorpayClient = () => {
+  if (!hasRazorpayConfig) {
+    throw new Error(
+      "Razorpay keys are missing. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET."
+    );
+  }
+
+  return new Razorpay({
+    key_id: secret.razorpay_key_id,
+    key_secret: secret.razorpay_key_secret,
+  });
+};
 
 // create-order (Razorpay equivalent of payment intent)
 module.exports.paymentIntent = async (req, res) => {
   try {
+    const razorpay = createRazorpayClient();
     const product = req.body;
     const price = Number(product.price);
     const amount = price * 100; // Razorpay expects amount in paise (smallest currency unit)
@@ -42,8 +54,14 @@ module.exports.paymentIntent = async (req, res) => {
 // verify-payment
 module.exports.verifyPayment = async (req, res) => {
   try {
+    if (!hasRazorpayConfig) {
+      throw new Error(
+        "Razorpay keys are missing. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET."
+      );
+    }
+
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
-    
+
     const crypto = require("crypto");
     const hmac = crypto.createHmac("sha256", secret.razorpay_key_secret);
     hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
