@@ -109,22 +109,6 @@ const useCheckoutSubmit = () => {
     }
   }, [razorpayLoaded]);
 
-  // create Razorpay order
-  useEffect(() => {
-    if (cartTotal && razorpayLoaded) {
-      createPaymentIntent({
-        price: parseInt(cartTotal),
-      })
-        .then((data) => {
-          setRazorpayOrderId(data.data?.orderId || data.data?.order_id);
-        })
-        .catch((error) => {
-          console.log(error);
-          notifyError("Failed to initialize payment");
-        });
-    }
-  }, [createPaymentIntent, cartTotal, razorpayLoaded]);
-
   // handleCouponCode
   const handleCouponCode = (e) => {
     e.preventDefault();
@@ -192,6 +176,25 @@ const useCheckoutSubmit = () => {
     dispatch(set_shipping(data));
     setIsCheckoutSubmit(true);
 
+    const hasRzpKey = Boolean(process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
+    if (!hasRzpKey) {
+      notifyError("Razorpay key is missing. Please contact support.");
+      setIsCheckoutSubmit(false);
+      return;
+    }
+
+    if (!cartTotal || Number(cartTotal) <= 0) {
+      notifyError("Invalid order amount. Please refresh and try again.");
+      setIsCheckoutSubmit(false);
+      return;
+    }
+
+    if (typeof window === "undefined" || !window.Razorpay || !razorpayLoaded) {
+      notifyError("Razorpay SDK not loaded. Please refresh the page.");
+      setIsCheckoutSubmit(false);
+      return;
+    }
+
     let orderInfo = {
       name: `${data.firstName} ${data.lastName}`,
       address: data.address,
@@ -210,32 +213,42 @@ const useCheckoutSubmit = () => {
       user:`${user?._id}`
     };
 
-    if (!razorpayOrderId) {
-      notifyError("Payment not initialized. Please try again.");
-      setIsCheckoutSubmit(false);
-      return;
-    }
+    try {
+      // Create Razorpay order on demand so orderId is always fresh
+      const paymentIntent = await createPaymentIntent({
+        price: Math.round(cartTotal),
+      }).unwrap();
 
-    if (typeof window === "undefined" || !window.Razorpay) {
-      notifyError("Razorpay SDK not loaded. Please refresh the page.");
-      setIsCheckoutSubmit(false);
-      return;
-    }
+      const latestOrderId = paymentIntent?.orderId || paymentIntent?.order_id;
+      if (!latestOrderId) {
+        notifyError("Payment could not be initialized. Please try again.");
+        setIsCheckoutSubmit(false);
+        return;
+      }
 
-    handlePaymentWithRazorpay(orderInfo);
-    setIsCheckoutSubmit(false);
+      setRazorpayOrderId(latestOrderId);
+      handlePaymentWithRazorpay(orderInfo, {
+        orderId: latestOrderId,
+        amount: paymentIntent?.amount,
+        currency: paymentIntent?.currency,
+      });
+    } catch (err) {
+      console.log(err);
+      notifyError("Failed to initialize payment. Please try again.");
+      setIsCheckoutSubmit(false);
+    }
   };
 
   // handlePaymentWithRazorpay
-  const handlePaymentWithRazorpay = async (orderInfo) => {
+  const handlePaymentWithRazorpay = async (orderInfo, paymentMeta = {}) => {
     try {
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(cartTotal * 100), // Amount in paise
-        currency: "INR",
+        amount: paymentMeta.amount || Math.round(cartTotal * 100), // Amount in paise
+        currency: paymentMeta.currency || "INR",
         name: "Uncut Designs",
         description: "Order Payment",
-        order_id: razorpayOrderId,
+        order_id: paymentMeta.orderId || razorpayOrderId,
         handler: async function (response) {
           try {
             // Verify payment on backend
@@ -260,15 +273,19 @@ const useCheckoutSubmit = () => {
               if (result?.success) {
                 router.push(`/order/${result.order?._id}`);
                 notifySuccess("Your Order Confirmed!");
+                setIsCheckoutSubmit(false);
               } else {
                 notifyError("Order creation failed");
+                setIsCheckoutSubmit(false);
               }
             } else {
               notifyError("Payment verification failed");
+              setIsCheckoutSubmit(false);
             }
           } catch (error) {
             console.log(error);
             notifyError("Payment verification failed");
+            setIsCheckoutSubmit(false);
           }
         },
         prefill: {
