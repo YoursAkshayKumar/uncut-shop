@@ -40,7 +40,7 @@ const SingleCartItem = ({item}) => {
         <Link href={`/product-details/${productSlug}`}>{title}</Link>
       </td>
       <td className="product-price">
-        <span className="amount">${originalPrice}</span>
+        <span className="amount">₹{originalPrice}</span>
       </td>
       <td className="product-quantity">
         <div className="tp-product-quantity mt-10 mb-10">
@@ -54,7 +54,7 @@ const SingleCartItem = ({item}) => {
         </div>
       </td>
       <td className="product-subtotal">
-        <span className="amount">${(originalPrice * orderQuantity).toFixed(2)}</span>
+        <span className="amount">₹{(originalPrice * orderQuantity).toFixed(2)}</span>
       </td>
       <td className="product-remove">
         <button type="submit" onClick={()=> handleRemovePrd(item)}>

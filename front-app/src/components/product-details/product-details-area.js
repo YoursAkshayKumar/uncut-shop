@@ -89,7 +89,7 @@ const ProductDetailsArea = ({ product }) => {
 
               <p className="mt-20">
                 Shop Harry.com for every day low prices. Free shipping on orders
-                $35+ or Pickup In-store and get
+                ₹35+ or Pickup In-store and get
               </p>
 
               {/* Product Details Price */}

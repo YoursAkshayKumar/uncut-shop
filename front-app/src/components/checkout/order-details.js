@@ -19,7 +19,7 @@ const OrderDetails = ({
       <tr className="cart-subtotal">
         <th>Cart Subtotal</th>
         <td className="text-end">
-          <span className="amount text-end">${total}</span>
+          <span className="amount text-end">₹{total}</span>
         </td>
       </tr>
       <tr className="shipping">
@@ -69,7 +69,7 @@ const OrderDetails = ({
         <th>Sub Total</th>
         <td className="text-end">
           <strong>
-            <span className="amount">${total}</span>
+            <span className="amount">₹{total}</span>
           </strong>
         </td>
       </tr>
@@ -78,7 +78,7 @@ const OrderDetails = ({
         <th>Shipping Cost</th>
         <td className="text-end">
           <strong>
-            <span className="amount">${shippingCost}</span>
+            <span className="amount">₹{shippingCost}</span>
           </strong>
         </td>
       </tr>
@@ -87,7 +87,7 @@ const OrderDetails = ({
         <th>Discount</th>
         <td className="text-end">
           <strong>
-            <span className="amount">${discountAmount.toFixed(2)}</span>
+            <span className="amount">₹{discountAmount.toFixed(2)}</span>
           </strong>
         </td>
       </tr>
@@ -96,7 +96,7 @@ const OrderDetails = ({
         <th>Total Order</th>
         <td className="text-end">
           <strong>
-            <span className="amount">${cartTotal}</span>
+            <span className="amount">₹{cartTotal}</span>
           </strong>
         </td>
       </tr>

@@ -108,20 +108,20 @@ export default function InvoiceArea({innerRef,info}) {
           <div className="col-lg-3 col-md-4">
             <div className="invoice__shippint-cost mb-30">
               <h5 className="mb-0">Shipping Cost</h5>
-              <p className="tp-font-medium">${shippingCost}</p>
+              <p className="tp-font-medium">₹{shippingCost}</p>
             </div>
           </div>
           <div className="col-lg-3 col-md-4">
             <div className="invoice__discount-cost mb-30">
               <h5 className="mb-0">Discount</h5>
-              <p className="tp-font-medium">${discount.toFixed(2)}</p>
+              <p className="tp-font-medium">₹{discount.toFixed(2)}</p>
             </div>
           </div>
           <div className="col-lg-3 col-md-4">
             <div className="invoice__total-ammount mb-30">
               <h5 className="mb-0">Total Ammount</h5>
               <p className="tp-font-medium text-danger">
-                <strong>${totalAmount}</strong>
+                <strong>₹{totalAmount}</strong>
               </p>
             </div>
           </div>

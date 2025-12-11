@@ -26,7 +26,7 @@ const ProductTableItem = ({ product }: { product: IProduct }) => {
         {product.quantity}
       </td>
       <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-        ${product.originalPrice}
+        ₹{product.originalPrice}
       </td>
       <td className="px-3 py-3 text-end">
         <span

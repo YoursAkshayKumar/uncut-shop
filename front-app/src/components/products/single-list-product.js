@@ -61,7 +61,7 @@ const SingleListProduct = ({ product }) => {
                 <Link href={`/product-details/${productSlug}`}>{title}</Link>
               </h3>
               <div className="product__list-price">
-                <span className="product__list-ammount">${price}</span>
+                <span className="product__list-ammount">₹{price}</span>
               </div>
               <p>
                 Shop Harry.com for every day low prices. Free shipping on orders
