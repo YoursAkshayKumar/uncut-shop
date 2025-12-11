@@ -7,11 +7,13 @@ import { RatingFull, RatingHalf } from "./rating";
 import { useDispatch } from "react-redux";
 import { initialOrderQuantity } from "src/redux/features/cartSlice";
 import { setProduct } from "src/redux/features/productSlice";
+import slugify from "src/utils/slugify";
 
 const SingleListProduct = ({ product }) => {
   const { _id, image, title, price, discount } = product || {};
   // handle dispatch
   const dispatch = useDispatch();
+  const productSlug = product?.slug || slugify(title);
 
   // handle quick view
   const handleQuickView = (prd) => {
@@ -25,7 +27,7 @@ const SingleListProduct = ({ product }) => {
         <div className="row">
           <div className="col-xl-5 col-lg-5">
             <div className="product__thumb product__list-thumb p-relative fix m-img">
-              <Link href={`product-details/${_id}`}>
+              <Link href={`/product-details/${productSlug}`}>
                 <Image
                   src={image}
                   alt="image"
@@ -56,7 +58,7 @@ const SingleListProduct = ({ product }) => {
               </div>
 
               <h3 className="product__list-title">
-                <Link href={`product-details/${_id}`}>{title}</Link>
+                <Link href={`/product-details/${productSlug}`}>{title}</Link>
               </h3>
               <div className="product__list-price">
                 <span className="product__list-ammount">${price}</span>
@@ -92,7 +94,7 @@ const SingleListProduct = ({ product }) => {
                   <span className="product-action-tooltip">Quick view</span>
                 </button>
 
-                <Link href={`/product-details/${_id}`}>
+                <Link href={`/product-details/${productSlug}`}>
                   <button
                     type="button"
                     className="product-action-btn product-action-btn-2"

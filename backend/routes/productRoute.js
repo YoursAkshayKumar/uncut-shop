@@ -25,7 +25,7 @@ router.get("/show", getShowingProducts);
 // get discount products
 router.get("/discount", getDiscountProduct);
 router.get("/relatedProduct", getRelatedProducts);
-router.get("/:id", getSingleProduct);
+router.get("/:slug", getSingleProduct);
 // delete product
 router.delete('/:id', deleteProduct);
 // get Single Product

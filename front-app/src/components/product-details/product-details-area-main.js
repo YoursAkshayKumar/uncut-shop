@@ -18,8 +18,10 @@ import PrdDetailsLoader from "@components/loader/details-loader";
 import { handleModalShow } from "src/redux/features/productSlice";
 // internal
 
-export default function ShopDetailsMainArea({ id }) {
-  const { data: product, isLoading, isError } = useGetProductQuery(id);
+export default function ShopDetailsMainArea({ slug }) {
+  const { data: product, isLoading, isError } = useGetProductQuery(slug, {
+    skip: !slug,
+  });
   const router = useRouter();
   const dispatch = useDispatch();
   useEffect(() => {

@@ -2,14 +2,43 @@ const Product = require("../models/Product");
 const Brand = require("../models/Brand");
 const Category = require("../models/Category");
 const ApiError = require("../errors/api-error");
+const makeSlug = (text = "") =>
+  text
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const buildBaseSlug = (title, sku) => {
+  const base = makeSlug(title);
+  if (sku) {
+    return makeSlug(`${title}-${sku}`);
+  }
+  return base || "product";
+};
+
+const ensureUniqueSlug = async (baseSlug) => {
+  let candidate = baseSlug || "product";
+  let suffix = 0;
+  // try a few suffixes to avoid collisions without leaking ids
+  while (await Product.exists({ slug: candidate })) {
+    suffix += 1;
+    candidate = `${baseSlug}-${suffix}`;
+  }
+  return candidate;
+};
 
 // addAllProducts
 module.exports.addProduct = async (req, res, next) => {
   try {
     const imageURLs = [req.body.image, ...req.body.relatedImages];
+    const baseSlug = buildBaseSlug(req.body.title, req.body.sku);
+    const slug = await ensureUniqueSlug(baseSlug);
     const newProduct = new Product({
       ...req.body,
       relatedImages: imageURLs,
+      slug,
     });
     await newProduct.save();
     const { _id: productId, brand, category } = newProduct;
@@ -35,7 +64,16 @@ module.exports.addProduct = async (req, res, next) => {
 module.exports.addAllProducts = async (req, res) => {
   try {
     await Product.deleteMany();
-    const result = await Product.insertMany(req.body);
+    const productsWithSlugs = [];
+    for (const product of req.body) {
+      const baseSlug = buildBaseSlug(product.title, product.sku);
+      const slug = await ensureUniqueSlug(baseSlug);
+      productsWithSlugs.push({
+        ...product,
+        slug,
+      });
+    }
+    const result = await Product.insertMany(productsWithSlugs);
     res.send({
       message: "Products added successfully",
       result,
@@ -89,7 +127,39 @@ module.exports.getDiscountProduct = async (req, res, next) => {
 // getDiscountProduct
 module.exports.getSingleProduct = async (req, res, next) => {
   try {
-    const product = await Product.findOne({ _id: req.params.id });
+    const { slug } = req.params;
+    let product = await Product.findOne({ slug });
+
+    if (!product) {
+      // fallback to object id for backward compatibility
+      try {
+        product = await Product.findById(slug);
+      } catch (_) {
+        product = null;
+      }
+    }
+
+    if (!product) {
+      // last-resort: match computed slug from title for legacy documents
+      const candidates = await Product.find({})
+        .select("_id title slug")
+        .lean();
+      const match = candidates.find(
+        (item) => item && makeSlug(item.title) === slug
+      );
+      if (match) {
+        product = await Product.findById(match._id);
+        if (product && !product.slug) {
+          const newSlug = await ensureUniqueSlug(makeSlug(product.title));
+          product.slug = newSlug;
+          await product.save();
+        }
+      }
+    }
+
+    if (!product) {
+      throw new ApiError(404, "Product not found");
+    }
     res.json(product);
   } catch (err) {
     next(err);
@@ -131,9 +201,21 @@ exports.updateProduct = async (req, res, next) => {
       throw new ApiError(404, "Product not found !");
     }
 
+    let nextSlug = req.body.slug;
+    if (!nextSlug && req.body.title) {
+      const baseSlug = buildBaseSlug(
+        req.body.title,
+        req.body.sku || isExist.sku
+      );
+      nextSlug = await ensureUniqueSlug(baseSlug);
+    }
+
     const result = await Product.findOneAndUpdate(
       { _id: req.params.id },
-      req.body,
+      {
+        ...req.body,
+        ...(nextSlug ? { slug: nextSlug } : {}),
+      },
       {
         new: true,
       }

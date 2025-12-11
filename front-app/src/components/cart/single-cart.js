@@ -5,10 +5,12 @@ import { useDispatch } from "react-redux";
 // internal
 import {Minus,Plus} from "@svg/index";
 import { add_cart_product, quantityDecrement, remove_product } from "src/redux/features/cartSlice";
+import slugify from "src/utils/slugify";
 
 const SingleCartItem = ({item}) => {
   const {_id,image,title,originalPrice,orderQuantity=0} = item || {};
   const dispatch = useDispatch()
+  const productSlug = item?.slug || slugify(title);
 
   // handle add product
   const handleAddProduct = (prd) => {
@@ -30,12 +32,12 @@ const SingleCartItem = ({item}) => {
   return (
     <tr>
       <td className="product-thumbnail">
-        <Link href={`product-details/${_id}`}>
+        <Link href={`/product-details/${productSlug}`}>
           <Image src={image} alt="cart img" width={125} height={125} />
         </Link>
       </td>
       <td className="product-name">
-        <Link href={`product-details/${_id}`}>{title}</Link>
+        <Link href={`/product-details/${productSlug}`}>{title}</Link>
       </td>
       <td className="product-price">
         <span className="amount">${originalPrice}</span>

@@ -15,6 +15,7 @@ import {
 } from "src/redux/features/cartSlice";
 import Link from "next/link";
 import { add_to_wishlist } from "src/redux/features/wishlist-slice";
+import slugify from "src/utils/slugify";
 
 const ProductModal = ({ product, list_modal = false }) => {
   const {
@@ -35,6 +36,7 @@ const ProductModal = ({ product, list_modal = false }) => {
 
   const { wishlist } = useSelector((state) => state.wishlist);
   const isWishlistAdded = wishlist.some((item) => item._id === _id);
+  const productSlug = product?.slug || slugify(title);
 
   // handle add product
   const handleAddProduct = (prd) => {
@@ -150,7 +152,7 @@ const ProductModal = ({ product, list_modal = false }) => {
                         Add To Wishlist
                       </span>
                     </button>
-                    <Link href={`/product-details/${_id}`}>
+                    <Link href={`/product-details/${productSlug}`}>
                       <button type="button" className="product-action-btn">
                         <i className="fa-solid fa-link"></i>
                         <span className="product-action-tooltip">

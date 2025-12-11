@@ -9,12 +9,14 @@ import {
   add_cart_product,
   quantityDecrement,
 } from "src/redux/features/cartSlice";
+import slugify from "src/utils/slugify";
 
 const SingleWishlist = ({ item }) => {
   const { _id, image, title, originalPrice } = item || {};
   const { cart_products } = useSelector((state) => state.cart);
   const isAddToCart = cart_products.find((item) => item._id === _id);
   const dispatch = useDispatch();
+  const productSlug = item?.slug || slugify(title);
 
   // handle add product
   const handleAddProduct = (prd) => {
@@ -36,12 +38,12 @@ const SingleWishlist = ({ item }) => {
   return (
     <tr>
       <td className="product-thumbnail">
-        <Link href={`product-details/${_id}`}>
+        <Link href={`/product-details/${productSlug}`}>
           <Image src={image} alt="cart img" width={125} height={125} />
         </Link>
       </td>
       <td className="product-name">
-        <Link href={`product-details/${_id}`}>{title}</Link>
+        <Link href={`/product-details/${productSlug}`}>{title}</Link>
       </td>
       <td className="product-price">
         <span className="amount">${originalPrice}</span>

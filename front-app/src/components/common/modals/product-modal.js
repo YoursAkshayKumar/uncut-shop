@@ -14,6 +14,7 @@ import Link from "next/link";
 import { add_to_wishlist } from "src/redux/features/wishlist-slice";
 import { Modal } from "react-bootstrap";
 import { handleModalShow } from "src/redux/features/productSlice";
+import slugify from "src/utils/slugify";
 
 const ProductModal = () => {
   const { product, isShow } = useSelector((state) => state.product);
@@ -22,6 +23,7 @@ const ProductModal = () => {
   const [activeImg, setActiveImg] = useState(image);
   const dispatch = useDispatch();
   const isWishlistAdded = wishlist.some((item) => item._id === _id);
+  const productSlug = product?.slug || slugify(title);
   
   if(!product) return null;
 
@@ -140,7 +142,7 @@ const ProductModal = () => {
                     Add To Wishlist
                   </span>
                 </button>
-                <Link href={`/product-details/${_id}`}>
+                <Link href={`/product-details/${productSlug}`}>
                   <button type="button" className="product-action-btn">
                     <i className="fa-solid fa-link"></i>
                     <span className="product-action-tooltip">

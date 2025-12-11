@@ -3,11 +3,13 @@ import Image from "next/image";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { remove_product } from "src/redux/features/cartSlice";
+import slugify from "src/utils/slugify";
 
 const SingleCartItem = ({ item }) => {
   const { _id, image, originalPrice, title, orderQuantity, discount } =
     item || {};
   const dispatch = useDispatch();
+  const productSlug = item?.slug || slugify(title);
 
   // handle remove cart
   const handleRemoveProduct = (prd) => {
@@ -17,14 +19,14 @@ const SingleCartItem = ({ item }) => {
     <div className="cartmini__widget-item">
       {image && (
         <div className="cartmini__thumb">
-          <Link href={`/product-details/${_id}`}>
+          <Link href={`/product-details/${productSlug}`}>
             <Image src={image} alt="cart img" width={70} height={90} />
           </Link>
         </div>
       )}
       <div className="cartmini__content">
         <h5>
-          <a href={`/product-details/${_id}`}>{title}</a>
+          <a href={`/product-details/${productSlug}`}>{title}</a>
         </h5>
         <div className="cartmini__price-wrapper">
           {!discount && (

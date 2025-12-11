@@ -98,6 +98,11 @@ const productSchema = mongoose.Schema({
     default: 'active',
     enum: ['active', 'inActive'],
   },
+  slug: {
+    type: String,
+    trim: true,
+    index: true,
+  },
 },{
   timestamps: true
 })
