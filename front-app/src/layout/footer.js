@@ -92,11 +92,10 @@ const Footer = () => {
                   col_3="3"
                   title="Support"
                   contents={[
-                    { url: "", title: "FAQs" },
-                    { url: "", title: "Reviews" },
-                    { url: "", title: "Contact Us" },
-                    { url: "", title: "Shipping" },
-                    { url: "", title: "Returns" },
+                    { url: "contact", title: "Contact Us" },
+                    { url: "privacy-policy", title: "Privacy Policy" },
+                    { url: "terms-and-condition", title: "Terms and Conditions" },
+                    { url: "return-policy", title: "Return Policy" },
                   ]}
                 />
 
