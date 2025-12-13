@@ -18,10 +18,10 @@ function SingleLocationItem({ title, icon, location, tel }) {
               </div>
               <div className="contact__location-content">
                 <p>
-                  <a href="mailto:contact.location@website.com">{location}</a>
+                  <a href={`mailto:${location}`}>{location}</a>
                 </p>
                 <p>
-                  <a href="tel:686-324-6838">{tel}</a>
+                  <a href={`tel:${tel.replace(/[\s()-]/g, '')}`}>{tel}</a>
                 </p>
               </div>
             </div>
@@ -31,11 +31,10 @@ function SingleLocationItem({ title, icon, location, tel }) {
           <div className="contact__location-btn text-sm-end">
             <a
               rel="noreferrer"
-              href="https://www.google.com/maps/place/102+Thompson+St,+New+York,+NY+10012,+USA/@40.7255437,-74.004061,17z/data=!3m1!4b1!4m5!3m4!1s0x89c2598c338f691d:0x6d5f394e7a1962cc!8m2!3d40.7255397!4d-74.0018723"
-              target="_blank"
+              href="mailto:support@uncutsshop.com"
               className="tp-btn-border"
             >
-              view location
+              Send Email
             </a>
           </div>
         </div>
@@ -52,10 +51,10 @@ const LocationArea = () => {
           <div className="col-xl-5 col-lg-7 offset-xl-1 col-md-8">
             <div className="tp-section-wrapper-2 mb-35">
               <span className="tp-section-subtitle-2 subtitle-mb-9">
-                LOCATIONS
+                CONTACT US
               </span>
               <h3 className="tp-section-title-2 font-40">
-                Come and visit our offices around the world
+                We're here to help with any questions
               </h3>
             </div>
           </div>
@@ -64,22 +63,10 @@ const LocationArea = () => {
           <div className="col-xl-10 ">
             <div className="contact__location-wrapper">
               <SingleLocationItem
-                title="Australia Office"
+                title="Customer Support"
                 icon={location_icon_1}
-                location="contact.location@website.com"
-                tel="686-324-6838"
-              />
-              <SingleLocationItem
-                title="San Francisco Office"
-                icon={location_icon_2}
-                location="contact.location@website.com"
-                tel="686-324-6810"
-              />
-              <SingleLocationItem
-                title="Egpyt Office"
-                icon={location_icon_3}
-                location="contact.location@website.com"
-                tel="786-324-6810"
+                location="support@uncutsshop.com"
+                tel="+91-8445432575"
               />
             </div>
           </div>

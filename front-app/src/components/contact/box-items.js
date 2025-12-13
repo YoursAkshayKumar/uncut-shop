@@ -36,10 +36,10 @@ const BoxItems = () => {
             content={
               <>
                 <p>
-                  <a href="mailto:location@website.com">location@website.com</a>
+                  <a href="mailto:info@uncutsshop.com">info@uncutsshop.com</a>
                 </p>
                 <p>
-                  <a href="tel:602-762-472-96">+(602) 762 472 96</a>
+                  <a href="tel:+918445432575">+91-8445432575</a>
                 </p>
               </>
             }
@@ -52,10 +52,10 @@ const BoxItems = () => {
                 <p>
                   <a
                     rel="noreferrer"
-                    href="https://www.google.com/maps/place/102+Thompson+St,+New+York,+NY+10012,+USA/@40.7255437,-74.004061,17z/data=!3m1!4b1!4m5!3m4!1s0x89c2598c338f691d:0x6d5f394e7a1962cc!8m2!3d40.7255397!4d-74.0018723"
+                    href="https://www.google.com/maps"
                     target="_blank"
                   >
-                    88 New South Head Rd, Triple, New York
+                    Online Store - Worldwide Shipping
                   </a>
                 </p>
               </>
@@ -67,7 +67,7 @@ const BoxItems = () => {
             content={
               <>
                 {" "}
-                <p>Follow on social media</p>
+                <p>Follow us on social media</p>
                 <div className="contact__social">
                   <SocialLinks />
                 </div>

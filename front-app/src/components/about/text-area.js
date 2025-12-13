@@ -12,7 +12,7 @@ const TextArea = () => {
               data-wow-duration="1s"
             >
               <h3 className="about__text-title">
-                It started with a <br /> bang now we are here.
+                Your trusted destination <br /> for quality products.
               </h3>
             </div>
           </div>
@@ -23,18 +23,18 @@ const TextArea = () => {
               data-wow-duration="1s"
             >
               <p>
-                Ut at maximus magna. Vestibulum interdum sapien in facilisis
-                imperdiet. Pellentesque habitant morbi tristique senectus et
-                netus et malesuada fames ac turpis egestas. Proin ac placerat
-                risus. Nullam eget tortor felis. Nulla facilisi.Vestibulum
-                mattis diam non luctus elementum. Cras sollicitudin, nisi in
-                semper viverra, felis diam consequat mi, quis tincidunt ligula
+                Welcome to Uncuts Shop, your premier online destination for quality products. 
+                We are committed to providing you with an exceptional shopping experience, 
+                offering a carefully curated selection of products that meet the highest standards 
+                of quality and value. Our mission is to make shopping convenient, enjoyable, and 
+                accessible for everyone.
               </p>
 
               <p>
-                Nam nibh diam, varius quis lectus eget, laoreet cursus metus.
-                morbi augue lectus, dapibus eget justo nec, consectetur auctor
-                nis luctus neque.!
+                At Uncuts Shop, we believe in building lasting relationships with our customers 
+                through transparency, excellent customer service, and a commitment to delivering 
+                products that exceed expectations. Whether you're looking for everyday essentials 
+                or something special, we're here to help you find exactly what you need.
               </p>
             </div>
           </div>

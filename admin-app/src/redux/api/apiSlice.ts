@@ -39,5 +39,8 @@ export const apiSlice = createApi({
     "AllStaff",
     "Stuff",
     "SingleProduct",
+    "AllSliders",
+    "ActiveSliders",
+    "getSlider",
   ],
 });

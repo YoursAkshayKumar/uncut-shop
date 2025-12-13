@@ -7,8 +7,8 @@ const ContactArea = () => {
   return (
     <>
       <TopBar
-        title="GET TO KNOW US"
-        subtitle="Have a project in mind? Let’s talk."
+        title="GET IN TOUCH"
+        subtitle="We'd love to hear from you. Contact us today!"
       />
       <BoxItems/>
       <FormArea/>

@@ -9,8 +9,8 @@ import ErrorMessage from "@components/error-message/error";
 const schema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
   email: Yup.string().required().email().label("Email"),
-  phone: Yup.string().required().min(11).label("Phone"),
-  company: Yup.string().required().label("Company"),
+  phone: Yup.string().required().min(10).label("Phone"),
+  company: Yup.string().label("Company"),
   message: Yup.string().required().min(20).label("Message"),
 });
 
@@ -68,9 +68,9 @@ const ContactForm = () => {
           <div className="contact__input-2">
             <input
               name="company"
-              {...register("company",{required:`Company is required!`})}
+              {...register("company")}
               type="text"
-              placeholder="Company"
+              placeholder="Company (Optional)"
               id="company"
             />
             <ErrorMessage message={errors.company?.message} />

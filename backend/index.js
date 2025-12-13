@@ -15,6 +15,7 @@ const userOrderRoute = require("./routes/userOrderRoute");
 const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const brandRoutes = require("./routes/brandRoutes");
+const sliderRoutes = require("./routes/sliderRoutes");
 
 // app init
 const app = express();
@@ -30,6 +31,7 @@ ConnectDb();
 app.use("/api/products", productsRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/brand", brandRoutes);
+app.use("/api/slider", sliderRoutes);
 app.use('/api/coupon', couponRoutes);
 app.use('/api/user', userRoute);
 app.use('/api/order', orderRouter);

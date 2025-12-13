@@ -17,6 +17,7 @@ type IPropType = {
 const GlobalImgUpload = ({setImage,isSubmitted,default_img,image,setIsSubmitted}: IPropType) => {
   const { handleImageUpload, uploadData, isError, isLoading } = useUploadImage();
   const showDefaultImage = !uploadData && !isLoading && !isError && default_img;
+  const showExistingImage = !uploadData && !isLoading && !isError && image && !default_img;
 
   const upload_img = isLoading ? (
     <Loading loading={isLoading} spinner="scale" />
@@ -31,6 +32,8 @@ const GlobalImgUpload = ({setImage,isSubmitted,default_img,image,setIsSubmitted}
     />
   ) : showDefaultImage ? (
     <Image src={default_img} alt="upload-img" width={100} height={91} />
+  ) : showExistingImage ? (
+    <Image src={image} alt="upload-img" width={100} height={91} className="rounded object-cover" />
   ) : (
     <Image src={upload_default} alt="upload-img" width={100} height={91} />
   );
@@ -47,8 +50,10 @@ const GlobalImgUpload = ({setImage,isSubmitted,default_img,image,setIsSubmitted}
       setImage(uploadData.data.url);
     } else if (default_img) {
       setImage(default_img);
+    } else if (image) {
+      setImage(image);
     }
-  }, [default_img, uploadData, isError, isLoading, setImage]);
+  }, [default_img, image, uploadData, isError, isLoading, setImage]);
   
 
   return (

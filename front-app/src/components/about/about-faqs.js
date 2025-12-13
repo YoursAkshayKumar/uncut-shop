@@ -10,21 +10,21 @@ import useModal from "@hooks/use-modal";
 const faq_items = [
   {
     id: "about-one",
-    title: "Can I cancel my account at any time?",
+    title: "What is your return policy?",
     show: true,
-    desc: "Non similique culpa in provident quos sit commodi beatae ea laborum suscipit id autem velit aut iusto odio et deleniti quis et doloremque enim vel consequuntur quos.",
+    desc: "We offer a hassle-free return policy. If you're not satisfied with your purchase, you can return items within 30 days of delivery. Items must be in their original condition with tags attached. Please contact our customer service team to initiate a return.",
     parent: "faqaccordion",
   },
   {
     id: "about-two",
-    title: "What happens after the license expires?",
-    desc: "Non similique culpa in provident quos sit commodi beatae ea laborum suscipit id autem velit aut iusto odio et deleniti quis et doloremque enim vel consequuntur quos.",
+    title: "How long does shipping take?",
+    desc: "Standard shipping typically takes 5-7 business days. We also offer express shipping options (2-3 business days) for faster delivery. Shipping times may vary based on your location and product availability. You'll receive a tracking number once your order ships.",
     parent: "faqaccordion",
   },
   {
     id: "about-three",
-    title: "Does Harry have any documentations?",
-    desc: "Non similique culpa in provident quos sit commodi beatae ea laborum suscipit id autem velit aut iusto odio et deleniti quis et doloremque enim vel consequuntur quos.",
+    title: "Do you offer customer support?",
+    desc: "Yes! Our dedicated customer support team is available 24/7 to assist you with any questions or concerns. You can reach us via email, live chat, or phone. We're committed to providing you with the best shopping experience possible.",
     parent: "faqaccordion",
   },
 ];
@@ -54,10 +54,10 @@ const AboutFaqs = () => {
               <div className="faq__wrapper-2 faq__gradient-border faq__style-2 tp-accordion pl-160">
                 <div className="faq__title-wrapper">
                   <span className="faq__title-pre">
-                   Get in touch with us to see how
+                   Have questions? We're here to help
                   </span>
                   <h3 className="faq__title">
-                    Provide smart and flexible digital services
+                    Frequently Asked Questions
                   </h3>
                 </div>
                 <div className="accordion" id="faqaccordion">

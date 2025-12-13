@@ -9,6 +9,7 @@ export default function FormFieldTwo({
   register,
   errors,
   type = "text",
+  showLabel = true,
 }: {
   name: string;
   isReq: boolean;
@@ -16,6 +17,7 @@ export default function FormFieldTwo({
   register: UseFormRegister<any>;
   errors: FieldErrors<any>;
   type?: string;
+  showLabel?: boolean;
 }) {
   const label = name.split(/(?=[A-Z])/).map((word) => word.toLowerCase()).join(" ");
   const format_date =
@@ -23,8 +25,8 @@ export default function FormFieldTwo({
       ? dayjs(default_val).format("YYYY-MM-DD")
       : default_val;
   return (
-    <div className="mb-5">
-      <p className="mb-0 text-base text-black">{label}</p>
+    <div className={showLabel ? "mb-5" : "mb-0"}>
+      {showLabel && <p className="mb-0 text-base text-black">{label}</p>}
       <input
         {...register(`${name.toLowerCase()}`, {
           required: isReq ? `${label} is required!` : false,
@@ -35,7 +37,7 @@ export default function FormFieldTwo({
         placeholder={label}
         defaultValue={type === "date" ? format_date : default_val}
       />
-      {isReq && <ErrorMsg msg={(errors?.[name]?.message as string) || ""} />}
+      {isReq && <ErrorMsg msg={(errors?.[name.toLowerCase()]?.message as string) || ""} />}
     </div>
   );
 }
