@@ -16,6 +16,7 @@ const cloudinaryRoutes = require("./routes/cloudinaryRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const brandRoutes = require("./routes/brandRoutes");
 const sliderRoutes = require("./routes/sliderRoutes");
+const subscriptionRoutes = require("./routes/subscriptionRoutes");
 
 // app init
 const app = express();
@@ -38,6 +39,7 @@ app.use('/api/order', orderRouter);
 app.use('/api/user-order', userOrderRoute);
 app.use("/api/cloudinary", cloudinaryRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/subscription", subscriptionRoutes);
 
 // root route
 app.get("/", (req, res) => res.send("Apps worked successfully"));

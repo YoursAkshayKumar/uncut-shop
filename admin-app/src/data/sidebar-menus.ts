@@ -11,6 +11,7 @@ import {
   Setting,
   Leaf,
   StuffUser,
+  Subscription,
 } from "@/svg";
 
 const sidebar_menu: Array<ISidebarMenus> = [
@@ -63,24 +64,30 @@ const sidebar_menu: Array<ISidebarMenus> = [
   },
   {
     id: 8,
+    icon: Subscription,
+    link: "/subscriptions",
+    title: "Subscriptions",
+  },
+  {
+    id: 9,
     icon: Profile,
     link: "/profile",
     title: "Profile",
   },
   {
-    id: 9,
+    id: 10,
     icon: Setting,
     link: "#",
     title: "Online store",
   },
   {
-    id: 10,
+    id: 11,
     icon: StuffUser,
     link: "/our-staff",
     title: "Our Staff",
   },
   {
-    id: 11,
+    id: 12,
     icon: Pages,
     link: "/dashboard",
     title: "Pages",

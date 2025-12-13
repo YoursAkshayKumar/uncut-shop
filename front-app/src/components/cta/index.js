@@ -1,12 +1,44 @@
 'use client';
+import { useState } from "react";
 // internal
 import bg from "@assets/img/cta/13/cta-bg-1.jpg";
+import { useAddSubscriptionMutation } from "src/redux/features/subscriptionApi";
 
 const ShopCta = () => {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [addSubscription] = useAddSubscriptionMutation();
+
   // handleSubmit
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  }
+    
+    if (!email || !email.trim()) {
+      setMessage("Please enter a valid email address");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage("");
+
+    try {
+      const result = await addSubscription({ email }).unwrap();
+      if (result.success) {
+        setMessage(result.message || "Successfully subscribed!");
+        setEmail("");
+      }
+    } catch (error) {
+      setMessage(
+        error?.data?.message || 
+        error?.message || 
+        "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section
       className="cta__area pt-50 pb-50 p-relative include-bg jarallax"
@@ -27,11 +59,33 @@ const ShopCta = () => {
               <div className="cta__form-13">
                 <form onSubmit={handleSubmit}>
                   <div className="cta__input-13">
-                    <input type="email" placeholder="Enter Your Email" />
-                    <button type="submit" className="tp-btn">
-                      Subscribe
+                    <input 
+                      type="email" 
+                      placeholder="Enter Your Email" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isSubmitting}
+                      required
+                    />
+                    <button 
+                      type="submit" 
+                      className="tp-btn"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Subscribing..." : "Subscribe"}
                     </button>
                   </div>
+                  {message && (
+                    <div 
+                      className={`mt-2 text-sm ${
+                        message.includes("Successfully") || message.includes("already subscribed")
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {message}
+                    </div>
+                  )}
                 </form>
               </div>
             </div>

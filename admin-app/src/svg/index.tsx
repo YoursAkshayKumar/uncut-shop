@@ -30,6 +30,7 @@ import Camera from "./camera";
 import CameraTwo from "./camera-2";
 import Leaf from "./leaf";
 import StuffUser from "./stuff-user";
+import Subscription from "./subscription";
 
 export {
   Categories,
@@ -64,4 +65,5 @@ export {
   Next,
   Prev,
   SmClose,
+  Subscription,
 }
