@@ -6,12 +6,6 @@ import OrderStatusChange from "../orders/status-change";
 
 const TableItem = (props: { order: IOrder }) => {
   const { order } = props;
-  const p_method =
-    order.paymentMethod === "COD"
-      ? "Cash"
-      : order.paymentMethod === "Card"
-      ? "Card"
-      : order.paymentMethod;
   return (
     <tr className="bg-white border-b border-gray6 last:border-0 text-start">
       <td className="px-3 py-3">#{order.invoice}</td>
@@ -40,9 +34,7 @@ const TableItem = (props: { order: IOrder }) => {
       <td className="px-3 py-3">
         <OrderStatusChange id={order._id} />
       </td>
-      {/* order actions */}
       <OrderActions id={order._id} cls="px-3 py-3" />
-      {/* order actions */}
     </tr>
   );
 };
