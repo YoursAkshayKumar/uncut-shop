@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 // internal
-import { HeartTwo, CartTwo } from "@svg/index";
+import { HeartTwo, CartTwo, NextArrow, PrevArrow } from "@svg/index";
 import { SocialShare } from "@components/social";
 import ProductDetailsPrice from "./product-details-price";
 import ProductQuantity from "./product-quantity";
@@ -96,6 +96,42 @@ const ProductDetailsArea = ({ product }) => {
     setActiveMediaType(item.type);
   };
 
+  // Get current active index
+  const getCurrentIndex = () => {
+    const validItems = mediaItems.filter(item => item && item.url && item.url.trim() !== '');
+    return validItems.findIndex(item => item.url === activeMediaUrl);
+  };
+
+  // Handle previous image
+  const handlePrevious = () => {
+    const validItems = mediaItems.filter(item => item && item.url && item.url.trim() !== '');
+    if (validItems.length === 0) return;
+    
+    const currentIndex = getCurrentIndex();
+    const previousIndex = currentIndex <= 0 ? validItems.length - 1 : currentIndex - 1;
+    const previousItem = validItems[previousIndex];
+    
+    setActiveMediaUrl(previousItem.url);
+    setActiveMediaType(previousItem.type);
+  };
+
+  // Handle next image
+  const handleNext = () => {
+    const validItems = mediaItems.filter(item => item && item.url && item.url.trim() !== '');
+    if (validItems.length === 0) return;
+    
+    const currentIndex = getCurrentIndex();
+    const nextIndex = currentIndex >= validItems.length - 1 ? 0 : currentIndex + 1;
+    const nextItem = validItems[nextIndex];
+    
+    setActiveMediaUrl(nextItem.url);
+    setActiveMediaType(nextItem.type);
+  };
+
+  // Check if there are multiple items
+  const validMediaItems = mediaItems.filter(item => item && item.url && item.url.trim() !== '');
+  const hasMultipleItems = validMediaItems.length > 1;
+
   const dispatch = useDispatch();
   const { wishlist } = useSelector((state) => state.wishlist);
   const isWishlistAdded = wishlist.some((item) => item._id === _id);
@@ -116,7 +152,7 @@ const ProductDetailsArea = ({ product }) => {
         <div className="row">
           <div className="col-xl-7 col-lg-6">
             <div className="product__details-thumb-tab mr-70">
-              <div className="product__details-thumb-content w-img">
+              <div className="product__details-thumb-content w-img" style={{ position: 'relative' }}>
                 <div>
                   {activeMediaType === 'video' && activeMediaUrl ? (
                     <ProductVideoPlayer videoUrl={activeMediaUrl} />
@@ -134,6 +170,77 @@ const ProductDetailsArea = ({ product }) => {
                     />
                   ) : null}
                 </div>
+                {/* Previous/Next Navigation Arrows */}
+                {hasMultipleItems && (
+                  <>
+                    <button
+                      onClick={handlePrevious}
+                      type="button"
+                      className="product__details-nav-btn product__details-nav-prev"
+                      style={{
+                        position: 'absolute',
+                        left: '15px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        border: '1px solid #e5e5e5',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        zIndex: 10,
+                        transition: 'all 0.3s ease',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+                        e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                        e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                      }}
+                    >
+                      <PrevArrow />
+                    </button>
+                    <button
+                      onClick={handleNext}
+                      type="button"
+                      className="product__details-nav-btn product__details-nav-next"
+                      style={{
+                        position: 'absolute',
+                        right: '15px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        width: '40px',
+                        height: '40px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        border: '1px solid #e5e5e5',
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        zIndex: 10,
+                        transition: 'all 0.3s ease',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 1)';
+                        e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                        e.currentTarget.style.transform = 'translateY(-50%) scale(1)';
+                      }}
+                    >
+                      <NextArrow />
+                    </button>
+                  </>
+                )}
               </div>
               {mediaItems && mediaItems.length > 0 && (
                 <div className="product__details-thumb-nav tp-tab">
