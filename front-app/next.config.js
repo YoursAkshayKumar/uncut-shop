@@ -4,6 +4,21 @@ const path = require('path');
 const nextConfig = {
   outputFileTracingRoot: path.resolve(__dirname),
   reactStrictMode: true,
+  sassOptions: {
+    includePaths: [
+      path.join(__dirname, 'node_modules'),
+      path.join(__dirname, 'node_modules/bootstrap/scss'),
+    ],
+    // Silence the deprecation warning
+    silenceDeprecations: ['legacy-js-api'],
+  },
+  webpack: (config) => {
+    // Ensure proper resolution for SCSS imports
+    config.resolve.alias = {
+      ...config.resolve.alias,
+    };
+    return config;
+  },
   images: {
     remotePatterns: [
       {

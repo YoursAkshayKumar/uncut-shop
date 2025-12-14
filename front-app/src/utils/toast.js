@@ -1,5 +1,5 @@
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// Note: CSS is now auto-injected in react-toastify v11, no need to import manually
 
 const notifySuccess = (message) =>
   toast.success(message, {
@@ -22,17 +22,5 @@ const notifyError = (message) =>
     draggable: true,
     progress: undefined,
   });
-
-<ToastContainer
-  position="top-center"
-  autoClose={3000}
-  hideProgressBar={false}
-  newestOnTop={false}
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-/>;
 
 export { ToastContainer, notifySuccess, notifyError };

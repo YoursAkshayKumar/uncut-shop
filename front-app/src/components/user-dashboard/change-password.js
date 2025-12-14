@@ -14,7 +14,8 @@ const schema = Yup.object().shape({
   password: Yup.string().required().min(6).label("Password"),
   newPassword: Yup.string().required().min(6).label("New Password"),
   confirmPassword: Yup.string()
-     .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+     .required('Please confirm your password')
+     .oneOf([Yup.ref('newPassword')], 'Passwords must match')
 });
 
 const ChangePassword = () => {

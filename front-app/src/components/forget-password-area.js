@@ -14,10 +14,9 @@ import { useConfirmForgotPasswordMutation } from "src/redux/features/auth/authAp
 // schema
 const schema = Yup.object().shape({
   password: Yup.string().required().min(6).label("Password"),
-  confirmPassword: Yup.string().oneOf(
-    [Yup.ref("password"), null],
-    "Passwords must match"
-  ),
+  confirmPassword: Yup.string()
+    .required('Please confirm your password')
+    .oneOf([Yup.ref("password")], "Passwords must match"),
 });
 
 const ForgotPasswordArea = ({ token }) => {

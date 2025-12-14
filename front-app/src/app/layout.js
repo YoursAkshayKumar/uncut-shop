@@ -18,7 +18,7 @@ const poppins = Poppins({
 const inter = Inter({
   weight: ["300", "400", "500", "600", "700", "800"],
   subsets: ["latin"],
-  variable: ["--tp-ff-inter", "--tp-ff-body", "--tp-ff-p"],
+  variable: "--tp-ff-inter",
 });
 const oswald = Oswald({
   weight: ["300", "400", "500", "600", "700"],
