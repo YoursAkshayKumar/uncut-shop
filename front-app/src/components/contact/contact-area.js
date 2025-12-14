@@ -12,7 +12,7 @@ const ContactArea = () => {
       />
       <BoxItems/>
       <FormArea/>
-      <LocationArea/>
+      {/* <LocationArea/> */}
     </>
   );
 };
