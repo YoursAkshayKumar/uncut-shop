@@ -1,6 +1,14 @@
 // Import colors and exclude deprecated ones to silence warnings
 const allColors = require('tailwindcss/colors');
-const { lightBlue, warmGray, trueGray, coolGray, blueGray, ...colors } = allColors;
+// Exclude deprecated color names that have been renamed in Tailwind CSS v2.2+ and v3.0+
+// lightBlue → sky, warmGray → stone, trueGray → neutral, coolGray → gray, blueGray → slate
+const deprecatedColors = ['lightBlue', 'warmGray', 'trueGray', 'coolGray', 'blueGray'];
+const colors = Object.keys(allColors)
+  .filter(key => !deprecatedColors.includes(key))
+  .reduce((obj, key) => {
+    obj[key] = allColors[key];
+    return obj;
+  }, {});
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
