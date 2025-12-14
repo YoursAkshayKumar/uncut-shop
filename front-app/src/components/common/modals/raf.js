@@ -88,29 +88,31 @@ const ProductModal = ({ product, list_modal = false }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="product__details-thumb-nav tp-tab">
-                      <nav>
-                        <div className="nav nav-tabs justify-content-sm-between">
-                          {relatedImages.map((img, i) => (
-                            <button
-                              key={i}
-                              className={`nav-link ${
-                                img === activeImg ? "active" : ""
-                              }`}
-                              onClick={() => setActiveImg(img)}
-                            >
-                              <Image
-                                src={img}
-                                alt="image"
-                                width={90}
-                                height={90}
-                                style={{ width: "100%", height: "100%" }}
-                              />
-                            </button>
-                          ))}
-                        </div>
-                      </nav>
-                    </div>
+                    {relatedImages && relatedImages.length > 0 && (
+                      <div className="product__details-thumb-nav tp-tab">
+                        <nav>
+                          <div className="nav nav-tabs justify-content-sm-between">
+                            {relatedImages.map((img, i) => (
+                              <button
+                                key={i}
+                                className={`nav-link ${
+                                  img === activeImg ? "active" : ""
+                                }`}
+                                onClick={() => setActiveImg(img)}
+                              >
+                                <Image
+                                  src={img}
+                                  alt="image"
+                                  width={90}
+                                  height={90}
+                                  style={{ width: "100%", height: "100%" }}
+                                />
+                              </button>
+                            ))}
+                          </div>
+                        </nav>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

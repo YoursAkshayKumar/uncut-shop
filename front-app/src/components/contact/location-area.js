@@ -66,7 +66,7 @@ const LocationArea = () => {
                 title="Customer Support"
                 icon={location_icon_1}
                 location="support@uncutsshop.com"
-                tel="+91-8445432575"
+                tel="+91-8630871663"
               />
             </div>
           </div>

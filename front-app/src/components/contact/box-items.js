@@ -39,7 +39,7 @@ const BoxItems = () => {
                   <a href="mailto:info@uncutsshop.com">info@uncutsshop.com</a>
                 </p>
                 <p>
-                  <a href="tel:+918445432575">+91-8445432575</a>
+                  <a href="tel:+918630871663">+91-8630871663</a>
                 </p>
               </>
             }

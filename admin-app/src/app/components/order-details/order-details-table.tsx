@@ -40,7 +40,7 @@ const OrderDetailsTable = ({orderData}:IPropType) => {
                                   Phone
                               </td>
                               <td  className="py-3 text-end">
-                                  <a href="tel:9458785014">{orderData?.contact}</a>
+                                  <a href={`tel:${orderData?.contact?.replace(/[\s()-]/g, '') || '918630871663'}`}>{orderData?.contact || '+91-8630871663'}</a>
                               </td>                                            
                           </tr>                                                           
                       </tbody>

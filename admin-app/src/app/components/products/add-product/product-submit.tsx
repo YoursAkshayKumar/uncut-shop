@@ -32,6 +32,8 @@ const ProductSubmit = () => {
     setRelatedImages,
     setColors,
     colors,
+    video,
+    setVideo,
   } = useProductSubmit();
 
   return (
@@ -116,6 +118,7 @@ const ProductSubmit = () => {
             setImgUrl={setImg}
             isSubmitted={isSubmitted}
           />
+
 
           <div className="bg-white px-8 py-8 rounded-md mb-6">
             <p className="mb-5 text-base text-black">Product Category</p>

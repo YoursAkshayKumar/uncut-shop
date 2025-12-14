@@ -15,6 +15,7 @@ type IBCType = {
 const useProductSubmit = () => {
   const [img, setImg] = useState<string>("");
   const [relatedImages, setRelatedImages] = useState<string[]>([]);
+  const [video, setVideo] = useState<string>("");
   const [brand, setBrand] = useState<IBCType>({ name: '', id: '' });
   const [category, setCategory] = useState<IBCType>({ name: '', id: '' });
   const [parent, setParent] = useState<string>('');
@@ -57,6 +58,7 @@ const useProductSubmit = () => {
       price: Number(data.price),
       discount: Number(data.discount),
       relatedImages: relatedImages,
+      video: video,
       description: data.description,
       brand: brand,
       category: category,
@@ -110,6 +112,7 @@ const useProductSubmit = () => {
       price: Number(data.price),
       discount: Number(data.discount),
       relatedImages: relatedImages,
+      video: video,
       description: data.description,
       brand: brand,
       category: category,
@@ -143,6 +146,8 @@ const useProductSubmit = () => {
   return {
     img,
     setImg,
+    video,
+    setVideo,
     parent,
     brand,
     setBrand,

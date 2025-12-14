@@ -12,6 +12,7 @@ export interface IProduct {
   price: number;
   discount?: number;
   relatedImages: string[];
+  video?: string;
   description: string;
   orderQuantity:number;
   brand: {
@@ -48,6 +49,7 @@ export interface IAddProduct {
   price: number;
   discount?: number;
   relatedImages: string[];
+  video?: string;
   description: string;
   brand: {
     name:string;

@@ -49,6 +49,17 @@ const productSchema = mongoose.Schema({
     required: false,
     validate: [valid.isURL, "wrong url"]
   }],
+  video: {
+    type: String,
+    required: false,
+    validate: {
+      validator: function(v) {
+        if (!v) return true; // Optional field
+        return valid.isURL(v);
+      },
+      message: "Video must be a valid URL"
+    }
+  },
   description: {
     type: String,
     required: true,

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useProductSubmit from "@/hooks/useProductSubmit";
 import ErrorMsg from "../../common/error-msg";
 import FormField from "../form-field";
@@ -33,7 +33,21 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     setColors,
     colors,
     handleEditProduct,
+    video,
+    setVideo,
   } = useProductSubmit();
+  const [hasInitializedVideo, setHasInitializedVideo] = useState(false);
+
+  // Add existing video to relatedImages if it exists
+  useEffect(() => {
+    if (product && product.video && !hasInitializedVideo) {
+      const videoInRelated = relatedImages.includes(product.video);
+      if (!videoInRelated) {
+        setRelatedImages((prev) => [...prev, product.video]);
+      }
+      setHasInitializedVideo(true);
+    }
+  }, [product, relatedImages, hasInitializedVideo, setRelatedImages]);
 
   // decide what to render
   let content = null;
@@ -142,6 +156,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               default_img={product.image}
               isSubmitted={isSubmitted}
             />
+
 
             <div className="bg-white px-8 py-8 rounded-md mb-6">
               <p className="mb-5 text-base text-black">Product Category</p>

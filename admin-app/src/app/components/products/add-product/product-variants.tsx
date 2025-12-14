@@ -39,7 +39,7 @@ const ProductVariants = ({
 
   return (
     <div className="bg-white px-8 py-8 rounded-md mb-6">
-      <h4 className="text-[22px]">Product Variations</h4>
+      <h4 className="text-[22px]">Product Media Variations</h4>
       {relatedImages.map((field, i) => (
         <div key={i} className="mt-10 pt-10 border-t border-gray relative">
           <div className="text-end">
