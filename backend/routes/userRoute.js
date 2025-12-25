@@ -7,6 +7,8 @@ const router = express.Router();
 
 //confirmEmail
 router.get('/confirmEmail/:token', userController.confirmEmail);
+// verify code
+router.post("/verify-code", userController.verifyCode);
 // add a user
 router.post("/signup", userController.signup);
 // login
@@ -15,6 +17,8 @@ router.post("/login", userController.login);
 router.get("/me",verifyToken, userController.getMe);
 //forget-password
 router.patch('/forget-password', userController.forgetPassword);
+// verify-password-reset-code
+router.post('/verify-password-reset-code', userController.verifyPasswordResetCode);
 // confirm-forget-password
 router.patch('/confirm-forget-password', userController.confirmForgetPassword);
 // change password

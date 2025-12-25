@@ -61,6 +61,38 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    // verifyCode
+    verifyCode: builder.mutation({
+      query: (data) => ({
+        url: "api/user/verify-code",
+        method: "POST",
+        body: data,
+      }),
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+
+          localStorage.setItem(
+            "auth",
+            JSON.stringify({
+              accessToken: result.data.data.token,
+              user: result.data.data.user,
+            })
+          );
+
+          dispatch(
+            userLoggedIn({
+              accessToken: result.data.data.token,
+              user: result.data.data.user,
+            })
+          );
+        } catch (err) {
+          // do nothing
+        }
+      },
+    }),
+
     // confirmEmail
     confirmEmail: builder.query({
       query: (token) => `api/user/confirmEmail/${token}`,
@@ -93,6 +125,14 @@ export const authApi = apiSlice.injectEndpoints({
       query: (data) => ({
         url: "api/user/forget-password",
         method: "PATCH",
+        body: data,
+      }),
+    }),
+    // verifyPasswordResetCode
+    verifyPasswordResetCode: builder.mutation({
+      query: (data) => ({
+        url: "api/user/verify-password-reset-code",
+        method: "POST",
         body: data,
       }),
     }),
@@ -148,8 +188,10 @@ export const authApi = apiSlice.injectEndpoints({
 export const {
   useLoginUserMutation,
   useRegisterUserMutation,
+  useVerifyCodeMutation,
   useConfirmEmailQuery,
   useResetPasswordMutation,
+  useVerifyPasswordResetCodeMutation,
   useConfirmForgotPasswordMutation,
   useChangePasswordMutation,
   useUpdateProfileMutation,

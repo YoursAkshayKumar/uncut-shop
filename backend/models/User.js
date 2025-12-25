@@ -71,6 +71,12 @@ const userSchema = mongoose.Schema(
     confirmationToken: String,
     confirmationTokenExpires: Date,
 
+    verificationCode: String,
+    verificationCodeExpires: Date,
+
+    passwordResetVerificationCode: String,
+    passwordResetVerificationCodeExpires: Date,
+
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -108,6 +114,36 @@ userSchema.methods.generateConfirmationToken = function () {
   this.confirmationTokenExpires = date;
 
   return token;
+};
+
+// generateVerificationCode
+userSchema.methods.generateVerificationCode = function () {
+  // Generate a 6-digit verification code
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+  this.verificationCode = code;
+
+  const date = new Date();
+  // Code expires in 15 minutes
+  date.setMinutes(date.getMinutes() + 15);
+  this.verificationCodeExpires = date;
+
+  return code;
+};
+
+// generatePasswordResetVerificationCode
+userSchema.methods.generatePasswordResetVerificationCode = function () {
+  // Generate a 6-digit verification code for password reset
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+  this.passwordResetVerificationCode = code;
+
+  const date = new Date();
+  // Code expires in 15 minutes
+  date.setMinutes(date.getMinutes() + 15);
+  this.passwordResetVerificationCodeExpires = date;
+
+  return code;
 };
 
 const User = mongoose.model("User", userSchema);

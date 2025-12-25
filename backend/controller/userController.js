@@ -10,26 +10,27 @@ module.exports.signup = async (req, res,next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      res.send({ status: "failed", message: "Email already exists" });
+      return res.status(409).send({ 
+        status: "failed", 
+        message: "This email is already registered. If you have forgotten your password, please go to password reset to change it.",
+        code: "EMAIL_EXISTS"
+      });
     } else {
       const saved_user = await User.create(req.body);
-      const token = saved_user.generateConfirmationToken();
+      const verificationCode = saved_user.generateVerificationCode();
 
       await saved_user.save({ validateBeforeSave: false });
 
       const mailData = {
         from: secret.email_user,
         to: `${req.body.email}`,
-        subject: "Email Activation",
-        subject: "Verify Your Email",
+        subject: "Verify Your Email - Uncut Designs",
         html: `<h2>Hello ${req.body.name}</h2>
         <p>Verify your email address to complete the signup and login into your <strong>Uncut Designs</strong> account.</p>
   
-          <p>This link will expire in <strong> 15 minute</strong>.</p>
+          <p>Your verification code is: <strong style="font-size: 24px; color: #22c55e; letter-spacing: 3px;">${verificationCode}</strong></p>
   
-          <p style="margin-bottom:20px;">Click this link for active your account</p>
-  
-          <a href="${secret.client_url}/email-verify/${token}" style="background:#22c55e;color:white;border:1px solid #22c55e; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Verify Account</a>
+          <p>This code will expire in <strong>15 minutes</strong>.</p>
   
           <p style="margin-top: 35px;">If you did not initiate this request, please contact us immediately at support@uncutdesign.com</p>
   
@@ -37,7 +38,7 @@ module.exports.signup = async (req, res,next) => {
           <strong>Uncut Designs Team</strong>
            `,
       };
-      const message = "Please check your email to verify!";
+      const message = "Please check your email for the verification code!";
       sendEmail(mailData, res, message);
     }
   } catch (error) {
@@ -128,6 +129,75 @@ module.exports.getMe = async (req, res) => {
     });
   }
 };
+// verifyCode - verify email with code
+module.exports.verifyCode = async (req, res, next) => {
+  try {
+    const { email, code } = req.body;
+
+    if (!email || !code) {
+      return res.status(400).json({
+        status: "fail",
+        error: "Email and verification code are required",
+      });
+    }
+
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        error: "User not found",
+      });
+    }
+
+    if (!user.verificationCode) {
+      return res.status(403).json({
+        status: "fail",
+        error: "No verification code found. Please register again.",
+      });
+    }
+
+    if (user.verificationCode !== code) {
+      return res.status(403).json({
+        status: "fail",
+        error: "Invalid verification code",
+      });
+    }
+
+    const expired = new Date() > new Date(user.verificationCodeExpires);
+
+    if (expired) {
+      return res.status(401).json({
+        status: "fail",
+        error: "Verification code expired. Please request a new one.",
+      });
+    }
+
+    // Activate user account
+    user.status = "active";
+    user.verificationCode = undefined;
+    user.verificationCodeExpires = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    const accessToken = generateToken(user);
+
+    const { password: pwd, ...others } = user.toObject();
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully verified your email and activated your account.",
+      data: {
+        user: others,
+        token: accessToken,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 // confirmEmail
 module.exports.confirmEmail = async (req, res) => {
   try {
@@ -178,28 +248,29 @@ module.exports.confirmEmail = async (req, res) => {
 };
 
 // forgetPassword
-module.exports.forgetPassword = async (req, res) => {
+module.exports.forgetPassword = async (req, res, next) => {
   try {
     const { verifyEmail } = req.body;
     const user = await User.findOne({ email: verifyEmail });
     if (!user) {
       return res.status(404).send({
+        status: "fail",
         message: "User Not found with this email!",
       });
     } else {
-      const token = tokenForVerify(user);
+      const verificationCode = user.generatePasswordResetVerificationCode();
+      await user.save({ validateBeforeSave: false });
+
       const body = {
         from: secret.email_user,
         to: `${verifyEmail}`,
-        subject: "Password Reset",
-        html: `<h2>Hello ${verifyEmail}</h2>
+        subject: "Password Reset - Uncut Designs",
+        html: `<h2>Hello ${user.name || verifyEmail}</h2>
         <p>A request has been received to change the password for your <strong>Uncut Designs</strong> account </p>
 
-        <p>This link will expire in <strong> 15 minute</strong>.</p>
+        <p>Your verification code is: <strong style="font-size: 24px; color: #22c55e; letter-spacing: 3px;">${verificationCode}</strong></p>
 
-        <p style="margin-bottom:20px;">Click this link for reset your password</p>
-
-        <a href=${secret.client_url}/forget-password/${token} style="background:#22c55e;color:white;border:1px solid #22c55e; padding: 10px 15px; border-radius: 4px; text-decoration:none;">Reset Password</a>
+        <p>This code will expire in <strong>15 minutes</strong>.</p>
 
         <p style="margin-top: 35px;">If you did not initiate this request, please contact us immediately at support@uncutdesign.com</p>
 
@@ -207,67 +278,129 @@ module.exports.forgetPassword = async (req, res) => {
         <strong>Uncut Designs Team</strong>
         `,
       };
-      user.confirmationToken = token;
-      const date = new Date();
-      date.setDate(date.getDate() + 1);
-      user.confirmationTokenExpires = date;
-      user.save({ validateBeforeSave: false });
-      const message = "Please check your email to reset password!";
+      const message = "Please check your email for the verification code to reset your password!";
       sendEmail(body, res, message);
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      status: "fail",
-      error,
-    });
+    next(error);
   }
 };
 
-// confirm-forget-password
-module.exports.confirmForgetPassword = async (req, res) => {
+// verifyPasswordResetCode - verify code for password reset
+module.exports.verifyPasswordResetCode = async (req, res, next) => {
   try {
-    const { token, password } = req.body;
-    const user = await User.findOne({ confirmationToken: token });
+    const { email, code } = req.body;
 
-    if (!user) {
-      return res.status(403).json({
+    if (!email || !code) {
+      return res.status(400).json({
         status: "fail",
-        error: "Invalid token",
+        error: "Email and verification code are required",
       });
     }
 
-    const expired = new Date() > new Date(user.confirmationTokenExpires);
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        error: "User not found",
+      });
+    }
+
+    if (!user.passwordResetVerificationCode) {
+      return res.status(403).json({
+        status: "fail",
+        error: "No verification code found. Please request password reset again.",
+      });
+    }
+
+    if (user.passwordResetVerificationCode !== code) {
+      return res.status(403).json({
+        status: "fail",
+        error: "Invalid verification code",
+      });
+    }
+
+    const expired = new Date() > new Date(user.passwordResetVerificationCodeExpires);
 
     if (expired) {
       return res.status(401).json({
         status: "fail",
-        error: "Token expired",
-      });
-    } else {
-      const newPassword = bcrypt.hashSync(password);
-      // console.log(newPassword)
-      await User.updateOne(
-        { confirmationToken: token },
-        { $set: { password: newPassword } }
-      );
-
-      user.confirmationToken = undefined;
-      user.confirmationTokenExpires = undefined;
-
-      user.save({ validateBeforeSave: false });
-
-      res.status(200).json({
-        status: "success",
-        message: "Password reset successfully",
+        error: "Verification code expired. Please request a new one.",
       });
     }
+
+    // Code is valid - return success (code will be cleared when password is reset)
+    res.status(200).json({
+      status: "success",
+      message: "Verification code is valid. You can now reset your password.",
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
-      status: "fail",
-      error,
+    next(error);
+  }
+};
+
+// confirm-forget-password - reset password with verification code
+module.exports.confirmForgetPassword = async (req, res, next) => {
+  try {
+    const { email, code, password } = req.body;
+
+    if (!email || !code || !password) {
+      return res.status(400).json({
+        status: "fail",
+        error: "Email, verification code, and new password are required",
+      });
+    }
+
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "fail",
+        error: "User not found",
+      });
+    }
+
+    if (!user.passwordResetVerificationCode) {
+      return res.status(403).json({
+        status: "fail",
+        error: "No verification code found. Please request password reset again.",
+      });
+    }
+
+    if (user.passwordResetVerificationCode !== code) {
+      return res.status(403).json({
+        status: "fail",
+        error: "Invalid verification code",
+      });
+    }
+
+    const expired = new Date() > new Date(user.passwordResetVerificationCodeExpires);
+
+    if (expired) {
+      return res.status(401).json({
+        status: "fail",
+        error: "Verification code expired. Please request a new one.",
+      });
+    }
+
+    // Update password
+    user.password = password;
+    user.passwordResetVerificationCode = undefined;
+    user.passwordResetVerificationCodeExpires = undefined;
+    user.passwordChangedAt = new Date();
+
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Password reset successfully",
     });
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 
