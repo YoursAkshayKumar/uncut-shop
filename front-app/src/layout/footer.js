@@ -77,13 +77,12 @@ const Footer = () => {
                   col="3"
                   col_2="3"
                   col_3="2"
-                  title="Shop"
+                  title="Quick Links"
                   contents={[
-                    { url: "#", title: "Game & Video" },
-                    { url: "#", title: "Phone &Tablets" },
-                    { url: "#", title: "Computers & Laptop" },
-                    { url: "#", title: "Sport Watches" },
-                    { url: "#", title: "Discounts" },
+                    { url: "/", title: "Home" },
+                    { url: "about", title: "About Us" },
+                    { url: "shop", title: "Shop" },
+                    { url: "contact", title: "Contact Us" },
                   ]}
                 />
                 <SingleWidget
@@ -92,7 +91,7 @@ const Footer = () => {
                   col_3="3"
                   title="Support"
                   contents={[
-                    { url: "contact", title: "Contact Us" },
+                    // { url: "contact", title: "Contact Us" },
                     { url: "privacy-policy", title: "Privacy Policy" },
                     { url: "terms-and-condition", title: "Terms and Conditions" },
                     { url: "return-policy", title: "Return Policy" },

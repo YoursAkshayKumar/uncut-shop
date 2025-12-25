@@ -77,6 +77,8 @@ const ProductDetailsArea = ({ product }) => {
 
   const [activeMediaUrl, setActiveMediaUrl] = useState(null);
   const [activeMediaType, setActiveMediaType] = useState('image');
+  const [isAutoSlidePaused, setIsAutoSlidePaused] = useState(false);
+  const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds
 
   useEffect(() => {
     // Always show main image first, even if video exists
@@ -94,6 +96,9 @@ const ProductDetailsArea = ({ product }) => {
   const handleMediaClick = (item) => {
     setActiveMediaUrl(item.url);
     setActiveMediaType(item.type);
+    setIsAutoSlidePaused(true);
+    // Resume auto-slide after a delay
+    setTimeout(() => setIsAutoSlidePaused(false), AUTO_SLIDE_INTERVAL);
   };
 
   // Get current active index
@@ -132,6 +137,28 @@ const ProductDetailsArea = ({ product }) => {
   const validMediaItems = mediaItems.filter(item => item && item.url && item.url.trim() !== '');
   const hasMultipleItems = validMediaItems.length > 1;
 
+  // Auto-slide functionality
+  useEffect(() => {
+    // Only enable auto-slide if there are multiple items
+    if (!hasMultipleItems || isAutoSlidePaused) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const validItems = mediaItems.filter(item => item && item.url && item.url.trim() !== '');
+      if (validItems.length === 0) return;
+      
+      const currentIndex = validItems.findIndex(item => item.url === activeMediaUrl);
+      const nextIndex = currentIndex >= validItems.length - 1 ? 0 : currentIndex + 1;
+      const nextItem = validItems[nextIndex];
+      
+      setActiveMediaUrl(nextItem.url);
+      setActiveMediaType(nextItem.type);
+    }, AUTO_SLIDE_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [hasMultipleItems, isAutoSlidePaused, activeMediaUrl, mediaItems]);
+
   const dispatch = useDispatch();
   const { wishlist } = useSelector((state) => state.wishlist);
   const isWishlistAdded = wishlist.some((item) => item._id === _id);
@@ -152,7 +179,12 @@ const ProductDetailsArea = ({ product }) => {
         <div className="row">
           <div className="col-xl-7 col-lg-6">
             <div className="product__details-thumb-tab mr-70">
-              <div className="product__details-thumb-content w-img" style={{ position: 'relative' }}>
+              <div 
+                className="product__details-thumb-content w-img" 
+                style={{ position: 'relative' }}
+                onMouseEnter={() => setIsAutoSlidePaused(true)}
+                onMouseLeave={() => setIsAutoSlidePaused(false)}
+              >
                 <div>
                   {activeMediaType === 'video' && activeMediaUrl ? (
                     <ProductVideoPlayer videoUrl={activeMediaUrl} />
