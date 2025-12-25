@@ -42,7 +42,7 @@ const SingleProduct = ({ product, discountPrd = false }) => {
 
   return (
     <React.Fragment>
-      <div className="product__item p-relative transition-3 mb-50">
+      <div className="product__item p-relative transition-3 mb-20">
         <div className="product__thumb w-img p-relative fix">
           <Link href={`/product-details/${productSlug}`}>
             <Image

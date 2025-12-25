@@ -354,7 +354,7 @@
         }
     }
     &__content{
-        padding-top: 14px;
+        padding-top: 6px;
     }
     &__rating{
         & span{
@@ -3083,6 +3083,40 @@ p.checkout-coupon button {
                                 color: #F50963;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Reduce padding in product listings */
+.product__popular-area {
+    .product__tab-wrapper {
+        .row {
+            margin-left: -4px;
+            margin-right: -4px;
+
+            [class*="col-"] {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+        }
+    }
+}
+
+/* Reduce padding in shop page product listings */
+.shop__area {
+    .shop__main {
+        .shop__tab-content {
+            .tab-content {
+                .row {
+                    margin-left: -4px;
+                    margin-right: -4px;
+
+                    [class*="col-"] {
+                        padding-left: 4px;
+                        padding-right: 4px;
                     }
                 }
             }
